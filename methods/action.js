@@ -53,10 +53,11 @@ var functions = {
                 return;
 }
 else{
+    var password = bcrypt.hashSync(req.body.password,10);
     var newUser = Users({
         email : req.body.email,
         name : req.body.name,
-        password : req.body.password,
+        password : password,
         systemID : req.body.systemID,
         type : req.body.type
     });
@@ -68,7 +69,7 @@ else{
       else{
 
         var token = jwt.encode(req.body.email,config.secret);
-        res.json({success: "User Registered",token : token,user:{email:req.body.email,name : req.body.name,systemID: req.body.systemID,password : req.body.password}});
+        res.json({success: "User Registered",token : token,user:{email:req.body.email,name : req.body.name,systemID: req.body.systemID,password : password}});
 
     }
       
@@ -90,6 +91,8 @@ else{
               res.status(403).send({success:false,msg:"user not found"});
           }
           else{
+
+
               user.comparePassword(req.body.password,function(err,isMatch){
                   if(isMatch && !err){
                      var token  = jwt.encode(user.email,config.secret);
