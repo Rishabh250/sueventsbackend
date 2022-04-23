@@ -93,9 +93,10 @@ else{
                   if(isMatch && !err){
                      var token  = jwt.encode(user.email,config.secret);
                      res.json({success:true,token:token});
+                     return;
                   }
                   else{
-                      return res.staus(403).send({success:false,msg:"Password wrong"});
+                      return res.status(403).send({success:false,msg:"Password wrong"});
                   }
               });
           }
