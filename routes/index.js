@@ -26,4 +26,7 @@ router.get("/userInfo",actions.getUserInfo);
 //Get All User Data
 router.get("/getAllUser",actions.getAllUser);
 
+//Forget Password
+router.post("/forgetPassword",actions.forgetPassword);
+
 module.exports = router;

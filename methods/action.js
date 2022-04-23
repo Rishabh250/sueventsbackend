@@ -2,6 +2,7 @@ const Users = require("../models/user");
 var jwt = require('jwt-simple');
 var config = require('../config/dbConfig');
 const { authorization } = require("passport/lib");
+var bcrypt = require("bcrypt");
 
 var functions = {
   addNew: function (req,res){
@@ -96,12 +97,35 @@ else{
                      return;
                   }
                   else{
-                      return res.status(403).send({success:false,msg:"Password wrong"});
+                      return res.status(403).json({success:false,msg:"Password wrong"});
                   }
               });
           }
       });
   },
+  forgetPassword :  async function(req,res){
+      
+
+    Users.findOne({
+        email:req.body.email
+    },function(err,user){
+        if(err){
+            throw err;
+        }
+        if(!user){
+          return  res.status(403).send({success:false,msg:"user not found"});
+        }
+        else{
+            const passwordHash = bcrypt.hashSync(req.body.password, 10);
+            Users.findOneAndUpdate({email : req.body.email},{password : passwordHash},(err,data)=>{
+                if(err){
+                    throw err;
+                }
+                return res.status(200).send({msg : "Password Reset" ,"user":{email : req.body.email,password : passwordHash}});
+            });
+        }
+    });
+},
   getUserInfo :async function(req,res) {
       if(req.headers["x-access-token"]){
           var token = req.headers["x-access-token"];
@@ -119,8 +143,12 @@ else{
   getAllUser : async function(req,res){
     var getAllUserData = await Users.find({});
     return res.json({"user" : getAllUserData});
-  }
+  },
+
+
+
 };
+
 
 
 
