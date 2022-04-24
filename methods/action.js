@@ -59,17 +59,17 @@ else{
         name : req.body.name,
         password : password,
         systemID : req.body.systemID,
-        type : req.body.type
+        type : req.body.type,
     });
   newUser.save(function(err,newUser){
       if(err){
-          res.status(400).json({success: false,msg:"Failed to save"});
+         return res.status(400).json({success: false,msg:"Failed to save"});
       }
       
       else{
 
         var token = jwt.encode(req.body.email,config.secret);
-        res.json({success: "User Registered",token : token,user:{email:req.body.email,name : req.body.name,systemID: req.body.systemID,password : password}});
+       return res.json({success: "User Registered",token : token,user:{email:req.body.email,name : req.body.name,systemID: req.body.systemID,password : password}});
 
     }
       
@@ -106,9 +106,8 @@ else{
           }
       });
   },
-  forgetPassword :  async function(req,res){
-      
 
+  forgetPassword :  async function(req,res){
     Users.findOne({
         email:req.body.email
     },function(err,user){
@@ -148,7 +147,7 @@ else{
     return res.json({"user" : getAllUserData});
   },
 
-
+ 
 
 };
 

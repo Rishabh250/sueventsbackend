@@ -1,7 +1,6 @@
-const { Router } = require("express");
 const express = require("express");
-const { route } = require("express/lib/application");
 const actions = require('../methods/action');
+const events = require('../methods/eventsActions');
 const router = express.Router();
 
 
@@ -28,5 +27,14 @@ router.get("/getAllUser",actions.getAllUser);
 
 //Forget Password
 router.post("/forgetPassword",actions.forgetPassword);
+
+//Create Event
+router.post("/createEvent",events.createEvent);
+
+//Get All Events
+router.get("/getAllEvents",events.getAllEvents);
+
+//Store Rounds
+router.post("/createRound",events.createRounds);
 
 module.exports = router;
