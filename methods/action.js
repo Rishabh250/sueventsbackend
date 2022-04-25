@@ -3,6 +3,8 @@ var jwt = require('jwt-simple');
 var config = require('../config/dbConfig');
 const { authorization } = require("passport/lib");
 var bcrypt = require("bcrypt");
+const nodemailer = require('nodemailer');
+
 
 var functions = {
   addNew: function (req,res){
@@ -106,6 +108,91 @@ else{
           }
       });
   },
+  sendOTP : async function(req,res){
+      Users.findOne({
+          email : req.body.email
+      },function(err,user){
+          if(err){
+              throw err;
+          }
+          if(!user){
+            return  res.status(403).send({success:false,msg:"user not found"});
+          }
+          else{
+          
+              var userEmail = req.body.email; 
+              let mailTransporter = nodemailer.createTransport({
+                  service: 'gmail',
+                  auth: {
+                      user: 'brishabh139@gmail.com',
+                      pass: "kavhovonkeswhrph"
+                  }
+              });
+              var finalOTP = Math.floor(100000 + Math.random() * 900000);
+              
+              let mailDetails = {
+                  from: 'brishabh139@gmail.com',
+                  to: userEmail,
+                  subject: 'Test mail',
+                  text: 'OTP for password reset is ' + finalOTP
+              };
+              mailTransporter.sendMail(mailDetails,async function(err, data) {
+                  if(err) {
+                      res.status(400).json({msg :'Error Occurs'});
+                  } else {
+                  var user = await  Users.findOne({email : userEmail});
+                    user.otp = finalOTP;
+                    await user.save();
+                    res.status(200).json({msg : "OTP Send"});
+              
+                  }
+              });
+  
+            
+          }
+      });
+  },
+
+  verifyOTP : async function(req,res){
+    Users.findOne({email : req.body.email},async function(err,user){
+        if(err){
+            throw err;
+        }
+        if(!user){
+          return  res.status(403).send({success:false,msg:"user not found"});
+        }
+        else{
+            if((!req.body.otp)){
+                res.status(400).json({msg : "Invalid OTP"});
+                return;
+            }
+            if((!req.body.email)){
+                res.status(400).json({msg : "Email Required"});
+                return;
+            }
+            else{
+               
+
+                var otpVerify = req.body.otp;
+
+               var getUser = await Users.findOne({email : req.body.email});
+            //    console.log(getUser.otp);
+               if(getUser.otp == otpVerify){
+                await Users.updateOne({email : req.body.email},{$unset :{otp : otpVerify }});
+                 return  res.status(200).json({msg : "OTP Verified"});
+
+               }
+               else{
+                return   res.status(400).json({msg : "Invalid OTP"});
+
+               }
+
+                
+                
+            }
+        }
+    });
+  },
 
   forgetPassword :  async function(req,res){
     Users.findOne({
@@ -118,13 +205,36 @@ else{
           return  res.status(403).send({success:false,msg:"user not found"});
         }
         else{
-            const passwordHash = bcrypt.hashSync(req.body.password, 10);
-            Users.findOneAndUpdate({email : req.body.email},{password : passwordHash},(err,data)=>{
-                if(err){
-                    throw err;
+            let mailTransporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: 'brishabh139@gmail.com',
+                    pass: "kavhovonkeswhrph"
                 }
-                return res.status(200).send({msg : "Password Reset" ,"user":{email : req.body.email,password : passwordHash}});
             });
+            const otp = (Math.floor(100000 + Math.random() * 900000));
+            let mailDetails = {
+                from: 'brishabh139@gmail.com',
+                to: 'rishu25bansal@gmail.com',
+                subject: 'Test mail',
+                text: 'OTP for password reset is ' + otp
+            };
+            mailTransporter.sendMail(mailDetails, function(err, data) {
+                if(err) {
+                    console.log('Error Occurs');
+                } else {
+                    console.log('Email sent successfully');
+            
+                }
+            });
+
+            // const passwordHash = bcrypt.hashSync(req.body.password, 10);
+            // Users.findOneAndUpdate({email : req.body.email},{password : passwordHash},(err,data)=>{
+            //     if(err){
+            //         throw err;
+            //     }
+            //     return res.status(200).send({msg : "Password Reset" ,"user":{email : req.body.email,password : passwordHash}});
+            // });
         }
     });
 },

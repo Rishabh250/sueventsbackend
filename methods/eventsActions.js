@@ -46,15 +46,27 @@ var functions = {
         var token = req.headers["x-access-token"];
         var decodeToken = jwt.decode(token,config.secret);
         var getUserData = await Users.findOne({email:decodeToken});
+        var getlastRound;
 
         var eventID = req.body.eventID;
+        if((!req.body.lastRound)){
+          getlastRound = false;
+        }
+        else{
+          getlastRound = req.body.lastRound;
+
+        }
         var createRound = {
             lab : req.body.lab,
             date : req.body.date,
             roundNumber : req.body.roundNumber,
-            testType : req.body.testType
+            testType : req.body.testType,
+            lastRound : getlastRound
+
         };
-        var storeRound = await Events.findOneAndUpdate({_id : eventID},{$push :{ rounds : createRound}});
+        var storeRound = await Events.findOne({_id : eventID});
+        storeRound.rounds.push(createRound);
+              await  storeRound.save();
         return res.status(200).json(storeRound);
 
       },

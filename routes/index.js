@@ -37,4 +37,10 @@ router.get("/getAllEvents",events.getAllEvents);
 //Store Rounds
 router.post("/createRound",events.createRounds);
 
+//Send OTP
+router.post("/sendOTP",actions.sendOTP);
+
+//Verify OTP
+router.post("/verifyOTP",actions.verifyOTP);
+
 module.exports = router;

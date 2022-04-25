@@ -15,7 +15,8 @@ var eventSchema = new Schema({
             roundNumber : {type : Number},
             lab : {type : String},
             testType : {type : String},
-            date : {type:String}
+            date : {type:String},
+            lastRound : {type : Boolean}
         } 
     ],
     createdBy : [{

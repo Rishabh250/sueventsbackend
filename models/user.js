@@ -12,6 +12,7 @@ var userSchema =new Schema({
     password:{type:String,require:true},
     systemID:{type:String,require:true,unique : true},
     type : {type : String,require:true},
+    otp : {type : Number}
     
    
 });
