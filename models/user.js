@@ -12,6 +12,10 @@ var userSchema =new Schema({
     password:{type:String,require:true},
     systemID:{type:String,require:true,unique : true},
     type : {type : String,require:true},
+    course : {type : String,required:true},
+    semester : {type : Number,required:true},
+    year : {type : Number,required:true},
+    gender : {type : String,required:true},
     otp : {type : Number}
     
    

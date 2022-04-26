@@ -4,11 +4,12 @@ var bcrypt = require("bcrypt");
 
 
 var eventSchema = new Schema({
-    title : {type : String,},
-    type : {type : String,},
-    description :{type : String,},
-    startDate : {type: String , },
-    endDate : {type : String,},
+    title : {type : String,required :true},
+    type : {type : String,required :true},
+    description :{type : String,required :true},
+    startDate : {type: String , required :true},
+    endDate : {type : String},
+    eventPrice : {type : String,required :true},
     rounds : [
        {
            

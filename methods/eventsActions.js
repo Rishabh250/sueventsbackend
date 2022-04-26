@@ -12,6 +12,8 @@ var functions = {
         var token = req.headers["x-access-token"];
         var decodeToken = jwt.decode(token,config.secret);
         var getUserData = await Users.findOne({email:decodeToken});
+        var price;
+        
     
         var createEvent = Events({
             title : req.body.title,
@@ -19,7 +21,8 @@ var functions = {
             startDate : req.body.startDate,
             endDate : req.body.endDate,
             description :req.body.description,
-            createdBy : [getUserData.id]
+            eventPrice : req.body.eventPrice,
+            createdBy : [getUserData.id],
         });
     
           createEvent.save(async function(err,newEvent){

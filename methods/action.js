@@ -19,7 +19,7 @@ var functions = {
       
 
 
-    if((!req.body.name)||(!req.body.password)||(!req.body.email||(!req.body.systemID)||(!req.body.type))) {
+    if((!req.body.name)||(!req.body.password)||(!req.body.email||(!req.body.systemID)||(!req.body.type)||(!req.body.year)||(!req.body.semester)||(!req.body.course))) {
         res.json({success:false,msg: "Enter all fields"});
         return;
 
@@ -62,6 +62,10 @@ else{
         password : password,
         systemID : req.body.systemID,
         type : req.body.type,
+        course : req.body.course,
+        year: req.body.year,
+        semester : req.body.semester,
+        gender: req.body.gender
     });
   newUser.save(function(err,newUser){
       if(err){
@@ -71,7 +75,7 @@ else{
       else{
 
         var token = jwt.encode(req.body.email,config.secret);
-       return res.json({success: "User Registered",token : token,user:{email:req.body.email,name : req.body.name,systemID: req.body.systemID,password : password}});
+       return res.json({success: "User Registered",token : token,user: newUser});
 
     }
       
@@ -205,36 +209,15 @@ else{
           return  res.status(403).send({success:false,msg:"user not found"});
         }
         else{
-            let mailTransporter = nodemailer.createTransport({
-                service: 'gmail',
-                auth: {
-                    user: 'brishabh139@gmail.com',
-                    pass: "kavhovonkeswhrph"
-                }
-            });
-            const otp = (Math.floor(100000 + Math.random() * 900000));
-            let mailDetails = {
-                from: 'brishabh139@gmail.com',
-                to: 'rishu25bansal@gmail.com',
-                subject: 'Test mail',
-                text: 'OTP for password reset is ' + otp
-            };
-            mailTransporter.sendMail(mailDetails, function(err, data) {
-                if(err) {
-                    console.log('Error Occurs');
-                } else {
-                    console.log('Email sent successfully');
-            
-                }
-            });
+       
 
-            // const passwordHash = bcrypt.hashSync(req.body.password, 10);
-            // Users.findOneAndUpdate({email : req.body.email},{password : passwordHash},(err,data)=>{
-            //     if(err){
-            //         throw err;
-            //     }
-            //     return res.status(200).send({msg : "Password Reset" ,"user":{email : req.body.email,password : passwordHash}});
-            // });
+            const passwordHash = bcrypt.hashSync(req.body.password, 10);
+            Users.findOneAndUpdate({email : req.body.email},{password : passwordHash},(err,data)=>{
+                if(err){
+                    throw err;
+                }
+                return res.status(200).send({msg : "Password Reset" ,"user":{email : req.body.email,password : passwordHash}});
+            });
         }
     });
 },
