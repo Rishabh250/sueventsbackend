@@ -226,7 +226,7 @@ else{
           var token = req.headers["x-access-token"];
           var decodeToken = jwt.decode(token,config.secret);
           var getUserData = await Users.findOne({email:decodeToken});
-          return res.json({success:"User Info",user: {email :getUserData.email,name :getUserData.name,systemID :getUserData.systemID,password :getUserData.password} });
+          return res.json({success:"User Info",user: getUserData });
       }
 
       else{
