@@ -121,6 +121,10 @@ var functions = {
           await getEvent.rounds[i].selectedStudends.push(studendData); 
           await  getEvent.save(); 
           }
+          else{
+          return res.status(400).json({msg:"Invalid Round ID"});
+
+          }
         }
       }
       else{
