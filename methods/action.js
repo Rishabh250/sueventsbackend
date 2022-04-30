@@ -19,7 +19,7 @@ var functions = {
       
 
 
-    if((!req.body.name)||(!req.body.password)||(!req.body.email||(!req.body.systemID)||(!req.body.type)||(!req.body.year)||(!req.body.semester)||(!req.body.course))) {
+    if((!req.body.name)||(!req.body.password)||(!req.body.email||(!req.body.systemID)||(!req.body.type)||(!req.body.year)||(!req.body.semester)||(!req.body.course)||(!req.body.gender))) {
         res.json({success:false,msg: "Enter all fields"});
         return;
 
@@ -65,7 +65,7 @@ else{
         course : req.body.course,
         year: req.body.year,
         semester : req.body.semester,
-        gender: req.body.gender
+        gender: req.body.gender,
     });
   newUser.save(function(err,newUser){
       if(err){
@@ -239,6 +239,7 @@ else{
     var getAllUserData = await Users.find({});
     return res.json({"user" : getAllUserData});
   },
+
 
  
 
