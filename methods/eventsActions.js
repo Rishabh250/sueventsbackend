@@ -80,22 +80,28 @@ var functions = {
         return res.status(200).json(storeRound);
 
       },
+
+
     selectedStudends : async function(req,res){
-        if((!req.body.eventID) || (!req.body.roundID)||(!req.body.name)||(!req.body.email||(!req.body.systemID)||(!req.body.type)||(!req.body.year)||(!req.body.semester)||(!req.body.course)||(!req.body.gender))){
+        if((!req.body.eventID) || (!req.body.roundID)){
           return  res.json({success:false,msg: "Enter all fields"});
         }
+
         var eventID = req.body.eventID;
         var roundID = req.body.roundID;
+        var token = req.headers["x-access-token"];
+        var decodeToken = jwt.decode(token,config.secret);
+        var getUserData = await Users.findOne({email:decodeToken});
 
         var studendData = {
-          email : req.body.email,
-          name : req.body.name,
-          systemID : req.body.systemID,
-          type : req.body.type,
-          course : req.body.course,
-          year: req.body.year,
-          semester : req.body.semester,
-          gender: req.body.gender,
+          email :getUserData.email,
+          name : getUserData.name,
+          systemID : getUserData.systemID,
+          type : getUserData.type,
+          course : getUserData.course,
+          year: getUserData.year,
+          semester : getUserData.semester,
+          gender: getUserData.gender,
       };
 
         var getEvent =  await Events.findOne({_id : eventID});
@@ -107,12 +113,12 @@ var functions = {
         for(var i =0 ; i < getEvent.rounds.length ; i++){
           if(getEvent.rounds[i]._id == roundID){
             for(var j =0 ; j < getEvent.rounds[i].selectedStudends.length; j++){
-              if(getEvent.rounds[i].selectedStudends[j].email == req.body.email ||
-                 getEvent.rounds[i].selectedStudends[j].systemID == req.body.systemID){
+              if(getEvent.rounds[i].selectedStudends[j].email == getUserData.email ||
+                 getEvent.rounds[i].selectedStudends[j].systemID == getUserData.systemID){
                 return res.status(400).json({msg : "Already Registered"});
               }
             }
-          var storeStudents = await getEvent.rounds[i].selectedStudends.push(studendData); 
+          await getEvent.rounds[i].selectedStudends.push(studendData); 
           await  getEvent.save(); 
           }
         }
@@ -127,20 +133,23 @@ var functions = {
       },
 
     applyEvent : async function(req,res){
-        if((!req.body.eventID) || (!req.body.name)||(!req.body.email||(!req.body.systemID)||(!req.body.type)||(!req.body.year)||(!req.body.semester)||(!req.body.course)||(!req.body.gender))){
-          return  res.json({success:false,msg: "Enter all fields"});
+        if((!req.body.eventID)){
+          return  res.status(400).json({success:false,msg: "Enter all fields"});
         }
+        var token = req.headers["x-access-token"];
+        var decodeToken = jwt.decode(token,config.secret);
+        var getUserData = await Users.findOne({email:decodeToken});
         var eventID = req.body.eventID;
 
         var studendData = {
-          email : req.body.email,
-          name : req.body.name,
-          systemID : req.body.systemID,
-          type : req.body.type,
-          course : req.body.course,
-          year: req.body.year,
-          semester : req.body.semester,
-          gender: req.body.gender,
+          email :getUserData.email,
+          name : getUserData.name,
+          systemID : getUserData.systemID,
+          type : getUserData.type,
+          course : getUserData.course,
+          year: getUserData.year,
+          semester : getUserData.semester,
+          gender: getUserData.gender,
       };
 
         var getEvent =  await Events.findOne({_id : eventID});
@@ -150,8 +159,8 @@ var functions = {
 
         if(getEvent.status == "open"){
           for(var j =0 ; j < getEvent.appliedStudents.length; j++){
-            if(getEvent.appliedStudents[j].email == req.body.email ||
-               getEvent.appliedStudents[j].systemID == req.body.systemID){
+            if(getEvent.appliedStudents[j].email == getUserData.email ||
+               getEvent.appliedStudents[j].systemID == getUserData.systemID){
               return res.status(400).json({msg : "Already Registered"});
                }
           }   
