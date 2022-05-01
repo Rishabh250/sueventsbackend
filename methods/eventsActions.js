@@ -14,6 +14,7 @@ var functions = {
       }
         var token = req.headers["x-access-token"];
         
+        
         var decodeToken = jwt.decode(token,config.secret);
         var getUserData = await Users.findOne({email:decodeToken});
         var getStatus;
