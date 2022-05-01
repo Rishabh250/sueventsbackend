@@ -240,6 +240,19 @@ else{
     return res.json({"user" : getAllUserData});
   },
 
+  singleUser : async function(req,res){
+
+    if(!req.headers["x-access-token"]){
+        return res.status(400).json({msg : "Please provide token"});
+      }
+      var token = req.headers["x-access-token"];
+      var decodeToken = jwt.decode(token,config.secret);
+      var getUserData = await Users.findOne({email:decodeToken}).populate({path : "events"});
+      return res.json({"user" : getUserData});
+
+
+  }
+
 
  
 

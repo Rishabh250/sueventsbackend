@@ -19,6 +19,9 @@ router.post("/createUser",actions.addNew);
 //Login User
 router.post("/loginUser",actions.authorization);
 
+//Get Single User
+router.get("/getSingleUser",actions.singleUser);
+
 // Post user Image
 // router.post("/uploadImage",actions.uploadImage);
 

@@ -190,7 +190,7 @@ var functions = {
           ];
           
           var getUser = await Users.findOne({email : getUserData.email});
-         await getUser.events.push(storeID);
+          await getUser.events.push(storeID);
           getUser.save();
           console.log(getUser);
           await getEvent.appliedStudents.push(studendData);
