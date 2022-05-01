@@ -11,6 +11,12 @@ var eventSchema = new Schema({
     startDate : {type: String , required :true},
     endDate : {type : String},
     eventPrice : {type : String,required :true},
+    facultyAssigned :[{
+        email:{type :String },
+        name: {type : String},  
+        gender : {type:String} ,
+        systemID:{type:String},
+    }],
     appliedStudents :[
         {
         email:{type :String },

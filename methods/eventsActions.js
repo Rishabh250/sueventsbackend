@@ -13,7 +13,7 @@ var functions = {
         return res.status(400).json({msg : "Please provide token"});
       }
         var token = req.headers["x-access-token"];
-        
+
         
         var decodeToken = jwt.decode(token,config.secret);
         var getUserData = await Users.findOne({email:decodeToken});
@@ -184,7 +184,15 @@ var functions = {
                getEvent.appliedStudents[j].systemID == getUserData.systemID){
               return res.status(400).json({msg : "Already Registered"});
                }
-          }   
+          }  
+          var storeID = [
+             getEvent._id
+          ];
+          
+          var getUser = await Users.findOne({email : getUserData.email});
+         await getUser.events.push(storeID);
+          getUser.save();
+          console.log(getUser);
           await getEvent.appliedStudents.push(studendData);
           getEvent.save();
       }
@@ -195,9 +203,11 @@ var functions = {
 
       },
 
+      
+
 
       getAllEvents : async function(req,res){
-        var allEvents = await Events.find({}).populate({path : "createdBy"});
+        var allEvents = await Events.find({});
         return res.status(200).json({events : allEvents});
      },
 
@@ -244,7 +254,9 @@ var functions = {
        }
        await closeEvent.save();
        res.status(200).json({msg : "Event Close" , event : {id : req.body.eventID, title : closeEvent.title}});
-     }
+     },
+
+     
 };
 
 module.exports = functions;

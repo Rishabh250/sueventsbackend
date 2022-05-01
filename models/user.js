@@ -17,7 +17,10 @@ var userSchema =new Schema({
     year : {type : Number,required:true},
     gender : {type : String,required:true},
     userImage :{type : String},
-    otp : {type : Number}
+    otp : {type : Number},
+    events :[{
+        eventID : {type : Object}
+    }]
     
    
 });
