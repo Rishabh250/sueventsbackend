@@ -185,15 +185,17 @@ var functions = {
               return res.status(400).json({msg : "Already Registered"});
                }
           }  
-          var storeID = [
-             getEvent._id
-          ];
+          var storeID = {
+            eventID : getEvent._id
+          };
           
           var getUser = await Users.findOne({email : getUserData.email});
          await getUser.events.push(storeID);
           getUser.save();
           console.log(getUser);
+
           await getEvent.appliedStudents.push(studendData);
+
           getEvent.save();
       }
       else{
@@ -256,7 +258,6 @@ var functions = {
        res.status(200).json({msg : "Event Close" , event : {id : req.body.eventID, title : closeEvent.title}});
      },
 
-     
 };
 
 module.exports = functions;

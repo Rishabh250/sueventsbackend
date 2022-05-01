@@ -19,7 +19,7 @@ var userSchema =new Schema({
     userImage :{type : String},
     otp : {type : Number},
     events :[{
-        eventID : {type : Object}
+        type : Object
     }]
     
    

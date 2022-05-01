@@ -4,7 +4,6 @@ var config = require('../config/dbConfig');
 const { authorization } = require("passport/lib");
 var bcrypt = require("bcrypt");
 const nodemailer = require('nodemailer');
-const { default: mongoose } = require("mongoose");
 
 
 var functions = {
@@ -67,10 +66,6 @@ else{
         year: req.body.year,
         semester : req.body.semester,
         gender: req.body.gender,
-        events :[{
-            type : Object,
-            
-        }]
     });
   newUser.save(function(err,newUser){
       if(err){
