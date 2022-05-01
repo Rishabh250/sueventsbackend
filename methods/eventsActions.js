@@ -3,12 +3,17 @@ const Rounds = require("../models/events");
 const Users = require("../models/user");
 var jwt = require('jwt-simple');
 var config = require('../config/dbConfig');
+const { json } = require("body-parser");
 
 
 
 var functions = {
     createEvent : async function(req,res){
+      if(!req.headers["x-access-token"]){
+        return res.status(400).json({msg : "Please provide token"});
+      }
         var token = req.headers["x-access-token"];
+        
         var decodeToken = jwt.decode(token,config.secret);
         var getUserData = await Users.findOne({email:decodeToken});
         var getStatus;
@@ -50,6 +55,9 @@ var functions = {
             res.json({success:false,msg: "Enter all fields"});
             return;
           }
+          if(!req.headers["x-access-token"]){
+            return res.status(400).json({msg : "Please provide token"});
+          }
         var token = req.headers["x-access-token"];
         var decodeToken = jwt.decode(token,config.secret);
         var getUserData = await Users.findOne({email:decodeToken});
@@ -86,7 +94,9 @@ var functions = {
         if((!req.body.eventID) || (!req.body.roundID)){
           return  res.json({success:false,msg: "Enter all fields"});
         }
-
+        if(!req.headers["x-access-token"]){
+          return res.status(400).json({msg : "Please provide token"});
+        }
         var eventID = req.body.eventID;
         var roundID = req.body.roundID;
         var token = req.headers["x-access-token"];
@@ -140,7 +150,13 @@ var functions = {
         if((!req.body.eventID)){
           return  res.status(400).json({success:false,msg: "Enter all fields"});
         }
+        if(!req.headers["x-access-token"]){
+          return res.status(400).json({msg : "Please provide token"});
+        }
         var token = req.headers["x-access-token"];
+
+        
+
         var decodeToken = jwt.decode(token,config.secret);
         var getUserData = await Users.findOne({email:decodeToken});
         var eventID = req.body.eventID;
