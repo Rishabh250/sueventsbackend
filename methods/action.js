@@ -236,7 +236,7 @@ else{
   },
 
   getAllUser : async function(req,res){
-    var getAllUserData = await Users.find({});
+    var getAllUserData = await Users.find({}).populate({path : "events"});
     return res.json({"user" : getAllUserData});
   },
 

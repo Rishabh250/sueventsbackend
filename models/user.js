@@ -19,7 +19,8 @@ var userSchema =new Schema({
     userImage :{type : String},
     otp : {type : Number},
     events :[{
-        type : Object
+        type : mongoose.Schema.Types.ObjectId,
+        ref : "Events"
     }]
     
    
