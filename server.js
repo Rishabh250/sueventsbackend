@@ -5,7 +5,6 @@ const passport = require("passport");
 const bodyParser = require("body-parser");
 const connectDB = require("./config/db");
 const routes = require("./routes/index");
-const { required } = require("nodemon/lib/config");
 
 connectDB();
 

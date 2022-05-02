@@ -16,7 +16,8 @@ var userSchema =new Schema({
     semester : {type : Number,required:true},
     year : {type : Number,required:true},
     gender : {type : String,required:true},
-    userImage :{type : String},
+    profileImage :{
+        type : String},
     otp : {type : Number},
     events :[{
         type : mongoose.Schema.Types.ObjectId,

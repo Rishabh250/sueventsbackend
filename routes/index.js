@@ -2,6 +2,7 @@ const express = require("express");
 const actions = require('../methods/action');
 const events = require('../methods/eventsActions');
 const router = express.Router();
+const upload = require("../methods/image");
 
 
 router.get('',(req,res)=>{
@@ -14,7 +15,7 @@ router.get('/user',(req,res)=>{
 });
 
 //Register User
-router.post("/createUser",actions.addNew);
+router.post("/createUser",upload.single("profileImage"),actions.addNew);
 
 //Login User
 router.post("/loginUser",actions.authorization);

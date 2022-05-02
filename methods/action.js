@@ -1,13 +1,13 @@
 const Users = require("../models/user");
 var jwt = require('jwt-simple');
 var config = require('../config/dbConfig');
-const { authorization } = require("passport/lib");
 var bcrypt = require("bcrypt");
 const nodemailer = require('nodemailer');
 
 
 var functions = {
   addNew: function (req,res){
+      var userImage;
       type = req.body.type;
       if( type == "Student"){
         checkEmail =req.body.email.split(".");
@@ -17,8 +17,6 @@ var functions = {
         }
       }
       
-
-
     if((!req.body.name)||(!req.body.password)||(!req.body.email||(!req.body.systemID)||(!req.body.type)||(!req.body.year)||(!req.body.semester)||(!req.body.course)||(!req.body.gender))) {
         res.json({success:false,msg: "Enter all fields"});
         return;
@@ -45,15 +43,15 @@ var functions = {
         res.status(400).send("Invalid Details");
         return;
     }
-
+    
     else{
 
-     
         Users.findOne({email: req.body.email}).then((err)=>{
             if(err){
                 res.status(400).send("email already exits");
                 return;
-}
+            }
+
 else{
     var password = bcrypt.hashSync(req.body.password,10);
     var newUser = Users({
@@ -66,8 +64,16 @@ else{
         year: req.body.year,
         semester : req.body.semester,
         gender: req.body.gender,
+        profileImage : userImage
     });
-  newUser.save(function(err,newUser){
+    if(req.file){
+        newUser.profileImage = req.file.path;
+    }
+    else if(!req.file){
+        newUser.profileImage = "";
+    }
+
+    newUser.save(function(err,newUser){
       if(err){
          return res.status(400).json({success: false,msg:"Failed to save"});
       }
@@ -249,13 +255,7 @@ else{
       var decodeToken = jwt.decode(token,config.secret);
       var getUserData = await Users.findOne({email:decodeToken}).populate({path : "events"});
       return res.json({"user" : getUserData});
-
-
-  }
-
-
- 
-
+    }
 };
 
 
