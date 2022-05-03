@@ -271,7 +271,7 @@ else{
 
         var token = req.headers["x-access-token"];
         var decodeToken = jwt.decode(token,config.secret);
-        var getUserData = await Users.findOne({email:decodeToken},{profileImage : userImage});
+        var getUserData = await Users.findOneAndUpdate({email:decodeToken},{profileImage : userImage});
         await getUserData.save();
         return res.status(200).json({msg : "Image Uploaded"});
 
