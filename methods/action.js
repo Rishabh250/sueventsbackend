@@ -43,6 +43,9 @@ var functions = {
         res.status(400).send("Invalid Details");
         return;
     }
+    else if(!req.body.profileImage){
+        userImage = "";
+    }
     
     else{
 
@@ -66,12 +69,7 @@ else{
         gender: req.body.gender,
         profileImage : userImage
     });
-    if(req.file){
-        newUser.profileImage = req.file.path;
-    }
-    else if(!req.file){
-        newUser.profileImage = "";
-    }
+   
 
     newUser.save(function(err,newUser){
       if(err){
@@ -255,8 +253,32 @@ else{
       var decodeToken = jwt.decode(token,config.secret);
       var getUserData = await Users.findOne({email:decodeToken}).populate({path : "events"});
       return res.json({"user" : getUserData});
+    },
+    
+    uploadImage : async function(req,res){
+
+        var userImage;
+        if(!req.headers["x-access-token"]){
+            return res.status(400).json({msg : "Please provide token"});
+        }
+        if(!req.body.profileImage){
+
+            return res.status(400).json({msg : "Please upload a profile image"});
+        }
+        else{
+            userImage = req.body.profileImage;
+        }
+
+        var token = req.headers["x-access-token"];
+        var decodeToken = jwt.decode(token,config.secret);
+        var getUserData = await Users.findOne({email:decodeToken},{profileImage : userImage});
+        await getUserData.save();
+        return res.status(200).json({msg : "Image Uploaded"});
+
     }
+
 };
+
 
 
 
