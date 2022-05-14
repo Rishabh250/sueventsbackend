@@ -51,7 +51,7 @@ var eventSchema = new Schema({
     }],
     createdBy: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
+        ref: "Faculty"
     }]
 
 });
