@@ -83,6 +83,9 @@ var functions = {
         if (!storeRound) {
             return res.status(400).json({ msg: "Events not found" });
         }
+        if (storeRound.status == "close") {
+            return res.status(400).json({ msg: "Event Closed" });
+        }
         storeRound.rounds.push(createRound);
         await storeRound.save();
         return res.status(200).json(storeRound);
