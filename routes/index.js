@@ -10,6 +10,8 @@ router.get('/', (req, res) => {
 
 });
 
+//Student API
+
 
 //Register User
 router.post("/createUser", actions.addNew);
@@ -32,15 +34,6 @@ router.get("/getAllUser", actions.getAllUser);
 //Forget Password
 router.post("/forgetPassword", actions.forgetPassword);
 
-//Create Event
-router.post("/createEvent", events.createEvent);
-
-//Get All Events
-router.get("/getAllEvents", events.getAllEvents);
-
-//Store Rounds
-router.post("/createRound", events.createRounds);
-
 //Send OTP
 router.post("/sendOTP", actions.sendOTP);
 
@@ -50,17 +43,8 @@ router.post("/verifyOTP", actions.verifyOTP);
 //Student Apply
 router.post("/applyEvent", events.applyEvent);
 
-//Selected Students or Attendence
-router.post("/selectedStudents", events.selectedStudends);
 
-//Event Round
-router.post("/getEventRound", events.getEventRound);
-
-//Single Round
-router.post("/getSingleRound", events.getSingletRound);
-
-//Close Event
-router.post("/closeEvent", events.closeEvent);
+//Faculty API
 
 //Faculty Create User
 router.post("/createFaculty", faculty.addNew);
@@ -87,6 +71,33 @@ router.post("/facultysendOTP", faculty.sendOTP);
 
 //Verify OTP
 router.post("/facultyverifyOTP", faculty.verifyOTP);
+
+
+
+
+
+// Event API
+
+//Create Event
+router.post("/createEvent", events.createEvent);
+
+//Get All Events
+router.get("/getAllEvents", events.getAllEvents);
+
+//Store Rounds
+router.post("/createRound", events.createRounds);
+
+//Selected Students or Attendence
+router.post("/selectedStudents", events.selectedStudends);
+
+//Event Round
+router.post("/getEventRound", events.getEventRound);
+
+//Single Round
+router.post("/getSingleRound", events.getSingletRound);
+
+//Close Event
+router.post("/closeEvent", events.closeEvent);
 
 
 

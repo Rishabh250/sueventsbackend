@@ -1,6 +1,7 @@
 const Events = require("../models/events");
 const Rounds = require("../models/events");
 const Users = require("../models/student");
+const Faculty = require("../models/faculty");
 var jwt = require('jwt-simple');
 var config = require('../config/dbConfig');
 const { json } = require("body-parser");
@@ -14,9 +15,8 @@ var functions = {
         }
         var token = req.headers["x-access-token"];
 
-
         var decodeToken = jwt.decode(token, config.secret);
-        var getUserData = await Users.findOne({ email: decodeToken });
+        var getUserData = await Faculty.findOne({ email: decodeToken });
         var getStatus;
         if (!(req.body.status) || req.body.status == "") {
             getStatus = "open";
@@ -42,7 +42,10 @@ var functions = {
             } else {
                 var eventData = createEvent;
                 var event = await Events.find({ _id: eventData.id }).populate({ path: "createdBy" });
-
+                var addEventatFaculty = await Faculty.findOne({ _id: getUserData.id });
+                await addEventatFaculty.eventsCreated.push(eventData.id);
+                await addEventatFaculty.save();
+                console.log(addEventatFaculty);
                 return res.status(200).json({ event });
 
             }
