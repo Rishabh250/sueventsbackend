@@ -10,16 +10,17 @@ connectDB();
 
 const app = express();
 
-if(process.env.NODE_ENV === "development"){
+if (process.env.NODE_ENV === "development") {
     app.use(morgan('dev'));
 }
 
 app.use(cors());
 
-app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(routes);
-app.use(passport.initialize());require('./config/passport')(passport);
-const PORT = process.env.PORT || 3000;
+app.use(passport.initialize());
+require('./config/passport')(passport);
+const PORT = process.env.PORT || 2504;
 
-app.listen(PORT,console.log(`Server running in ${process.env.NODE_ENV} made on PORT : ${PORT} `));
+app.listen(PORT, console.log(`Server running in ${process.env.NODE_ENV} made on PORT : ${PORT} `));

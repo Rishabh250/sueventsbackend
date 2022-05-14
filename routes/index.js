@@ -4,7 +4,7 @@ const events = require('../methods/eventsActions');
 const router = express.Router();
 
 
-router.get('/connection', (req, res) => {
+router.get('/', (req, res) => {
     res.send("Connected");
 
 });
