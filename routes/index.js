@@ -1,5 +1,5 @@
 const express = require("express");
-const actions = require('../methods/action');
+const actions = require('../methods/student');
 const events = require('../methods/eventsActions');
 const router = express.Router();
 

@@ -1,4 +1,4 @@
-const Users = require("../models/user");
+const Users = require("../models/student");
 var jwt = require('jwt-simple');
 var config = require('../config/dbConfig');
 var bcrypt = require("bcrypt");
@@ -7,7 +7,7 @@ const nodemailer = require('nodemailer');
 
 var functions = {
     addNew: function(req, res) {
-        var userImage;
+        let userImage;
         type = req.body.type;
         if (type == "Student") {
             checkEmail = req.body.email.split(".");
@@ -36,15 +36,20 @@ var functions = {
             console.log(req.body.type);
             res.status(400).send("Invalid Details");
             return;
-        } else if (!req.body.profileImage) {
-            userImage = "";
         } else {
+
+            if (!(req.body.profileImage)) {
+                userImage = "";
+
+            }
 
             Users.findOne({ email: req.body.email }).then((err) => {
                 if (err) {
                     res.status(400).send("email already exits");
                     return;
                 } else {
+                    console.log("dsa");
+
                     var password = bcrypt.hashSync(req.body.password, 10);
                     var newUser = Users({
                         email: req.body.email,

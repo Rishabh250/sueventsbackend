@@ -1,6 +1,6 @@
 const Events = require("../models/events");
 const Rounds = require("../models/events");
-const Users = require("../models/user");
+const Users = require("../models/student");
 var jwt = require('jwt-simple');
 var config = require('../config/dbConfig');
 const { json } = require("body-parser");
