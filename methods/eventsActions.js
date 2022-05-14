@@ -44,7 +44,6 @@ var functions = {
                 var event = await Events.find({ _id: eventData.id }).populate({ path: "createdBy" });
                 var addEventatFaculty = await Faculty.findOne({ _id: getUserData.id });
                 await addEventatFaculty.eventsCreated.push(eventData.id);
-                await addEventatFaculty.save();
                 console.log(addEventatFaculty);
                 return res.status(200).json({ event });
 
