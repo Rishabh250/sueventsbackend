@@ -1,6 +1,7 @@
 const express = require("express");
-const actions = require('../methods/student');
+const actions = require('../methods/studentActions');
 const events = require('../methods/eventsActions');
+const faculty = require('../methods/facultyActions');
 const router = express.Router();
 
 
@@ -60,6 +61,32 @@ router.post("/getSingleRound", events.getSingletRound);
 
 //Close Event
 router.post("/closeEvent", events.closeEvent);
+
+//Faculty Create User
+router.post("/createFaculty", faculty.addNew);
+
+router.post("/facultyloginUser", faculty.authorization);
+
+//Get Single User
+router.get("/facultygetSingleUser", faculty.singleUser);
+
+// Post user Image
+router.post("/facultyuploadImage", faculty.uploadImage);
+
+//Get Single User Info
+router.get("/facultyuserInfo", faculty.getUserInfo);
+
+//Get All User Data
+router.get("/facultygetAllUser", faculty.getAllUser);
+
+//Forget Password
+router.post("/facultyforgetPassword", faculty.forgetPassword);
+
+//Send OTP
+router.post("/facultysendOTP", faculty.sendOTP);
+
+//Verify OTP
+router.post("/facultyverifyOTP", faculty.verifyOTP);
 
 
 

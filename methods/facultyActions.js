@@ -1,9 +1,8 @@
-const Users = require("../models/student");
+const Faculty = require("../models/faculty");
 var jwt = require('jwt-simple');
 var config = require('../config/dbConfig');
 var bcrypt = require("bcrypt");
 const nodemailer = require('nodemailer');
-
 
 var functions = {
     addNew: function(req, res) {
@@ -17,7 +16,7 @@ var functions = {
             }
         }
 
-        if ((!req.body.name) || (!req.body.password) || (!req.body.email || (!req.body.systemID) || (!req.body.type) || (!req.body.year) || (!req.body.semester) || (!req.body.course) || (!req.body.gender))) {
+        if ((!req.body.name) || (!req.body.password) || (!req.body.email || (!req.body.systemID) || (!req.body.type) || (!req.body.gender))) {
             res.json({ success: false, msg: "Enter all fields" });
             return;
 
@@ -32,7 +31,7 @@ var functions = {
             res.status(400).send("Invalid System ID");
             return;
 
-        } else if ((req.body.type != "Student") && (req.body.type != "Faculty")) {
+        } else if ((req.body.type != "Faculty")) {
             console.log(req.body.type);
             res.status(400).send("Invalid Details");
             return;
@@ -43,23 +42,18 @@ var functions = {
 
             }
 
-            Users.findOne({ email: req.body.email }).then((err) => {
+            Faculty.findOne({ email: req.body.email }).then((err) => {
                 if (err) {
                     res.status(400).send("email already exits");
                     return;
                 } else {
-                    console.log("dsa");
-
                     var password = bcrypt.hashSync(req.body.password, 10);
-                    var newUser = Users({
+                    var newUser = Faculty({
                         email: req.body.email,
                         name: req.body.name,
                         password: password,
-                        systemID: req.body.systemID,
                         type: req.body.type,
-                        course: req.body.course,
-                        year: req.body.year,
-                        semester: req.body.semester,
+                        systemID: req.body.systemID,
                         gender: req.body.gender,
                         profileImage: userImage
                     });
@@ -71,7 +65,7 @@ var functions = {
                         } else {
 
                             var token = jwt.encode(req.body.email, config.secret);
-                            return res.json({ success: "User Registered", token: token, user: newUser });
+                            return res.json({ success: "Faculty Registered", token: token, user: newUser });
 
                         }
 
@@ -81,9 +75,8 @@ var functions = {
 
         }
     },
-
     authorization: function(req, res) {
-        Users.findOne({
+        Faculty.findOne({
             email: req.body.email
         }, function(err, user) {
             if (err) {
@@ -107,10 +100,11 @@ var functions = {
         });
     },
     sendOTP: async function(req, res) {
-        Users.findOne({
+        Faculty.findOne({
             email: req.body.email
         }, function(err, user) {
             if (err) {
+                console.log(err);
                 throw err;
             }
             if (!user) {
@@ -121,23 +115,24 @@ var functions = {
                 let mailTransporter = nodemailer.createTransport({
                     service: 'gmail',
                     auth: {
-                        user: 'brishabh139@gmail.com',
-                        pass: "kavhovonkeswhrph"
+                        user: 'rishu25bansal@gmail.com',
+                        pass: "ugmmbvbnfcppjvek"
                     }
                 });
                 var finalOTP = Math.floor(100000 + Math.random() * 900000);
 
                 let mailDetails = {
-                    from: 'brishabh139@gmail.com',
+                    from: 'rishu25bansal@gmail.com',
                     to: userEmail,
                     subject: 'Test mail',
                     text: 'OTP for password reset is ' + finalOTP
                 };
                 mailTransporter.sendMail(mailDetails, async function(err, data) {
                     if (err) {
-                        res.status(400).json({ msg: 'Error Occurs' });
+                        console.log(err);
+                        res.status(400).json({ msg: err });
                     } else {
-                        var user = await Users.findOne({ email: userEmail });
+                        var user = await Faculty.findOne({ email: userEmail });
                         user.otp = finalOTP;
                         await user.save();
                         res.status(200).json({ msg: "OTP Send" });
@@ -151,7 +146,7 @@ var functions = {
     },
 
     verifyOTP: async function(req, res) {
-        Users.findOne({ email: req.body.email }, async function(err, user) {
+        Faculty.findOne({ email: req.body.email }, async function(err, user) {
             if (err) {
                 throw err;
             }
@@ -170,10 +165,10 @@ var functions = {
 
                     var otpVerify = req.body.otp;
 
-                    var getUser = await Users.findOne({ email: req.body.email });
+                    var getUser = await Faculty.findOne({ email: req.body.email });
                     //    console.log(getUser.otp);
                     if (getUser.otp == otpVerify) {
-                        await Users.updateOne({ email: req.body.email }, { $unset: { otp: otpVerify } });
+                        await Faculty.updateOne({ email: req.body.email }, { $unset: { otp: otpVerify } });
                         return res.status(200).json({ msg: "OTP Verified" });
 
                     } else {
@@ -189,7 +184,7 @@ var functions = {
     },
 
     forgetPassword: async function(req, res) {
-        Users.findOne({
+        Faculty.findOne({
             email: req.body.email
         }, function(err, user) {
             if (err) {
@@ -201,7 +196,7 @@ var functions = {
 
 
                 const passwordHash = bcrypt.hashSync(req.body.password, 10);
-                Users.findOneAndUpdate({ email: req.body.email }, { password: passwordHash }, (err, data) => {
+                Faculty.findOneAndUpdate({ email: req.body.email }, { password: passwordHash }, (err, data) => {
                     if (err) {
                         throw err;
                     }
@@ -214,7 +209,7 @@ var functions = {
         if (req.headers["x-access-token"]) {
             var token = req.headers["x-access-token"];
             var decodeToken = jwt.decode(token, config.secret);
-            var getUserData = await Users.findOne({ email: decodeToken });
+            var getUserData = await Faculty.findOne({ email: decodeToken });
             return res.json({ success: "User Info", user: getUserData });
         } else {
             return res.json({ success: false, msg: 'No Found' });
@@ -223,7 +218,7 @@ var functions = {
     },
 
     getAllUser: async function(req, res) {
-        var getAllUserData = await Users.find({}).populate({ path: "events" });
+        var getAllUserData = await Faculty.find({}).populate({ path: "eventsCreated" });
         return res.json({ "user": getAllUserData });
     },
 
@@ -234,7 +229,7 @@ var functions = {
         }
         var token = req.headers["x-access-token"];
         var decodeToken = jwt.decode(token, config.secret);
-        var getUserData = await Users.findOne({ email: decodeToken }).populate({ path: "events" });
+        var getUserData = await Faculty.findOne({ email: decodeToken }).populate({ path: "eventsCreated" });
         return res.json({ "user": getUserData });
     },
 
@@ -253,11 +248,12 @@ var functions = {
 
         var token = req.headers["x-access-token"];
         var decodeToken = jwt.decode(token, config.secret);
-        var getUserData = await Users.findOneAndUpdate({ email: decodeToken }, { profileImage: userImage });
+        var getUserData = await Faculty.findOneAndUpdate({ email: decodeToken }, { profileImage: userImage });
         await getUserData.save();
         return res.status(200).json({ msg: "Image Uploaded" });
 
     }
 
 };
+
 module.exports = functions;
