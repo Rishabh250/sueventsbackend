@@ -278,10 +278,4 @@ else{
     }
 
 };
-
-
-
-
-
-
 module.exports = functions;
