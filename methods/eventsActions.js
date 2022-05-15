@@ -206,7 +206,7 @@ var functions = {
 
 
     getAllEvents: async function(req, res) {
-        var allEvents = await Events.find({}).populate({ path: "createdBy" });
+        var allEvents = await Events.find({ status: "open" }).populate({ path: "createdBy" });
         return res.status(200).json({ events: allEvents });
     },
 
