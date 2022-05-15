@@ -43,6 +43,9 @@ router.post("/verifyOTP", actions.verifyOTP);
 //Student Apply
 router.post("/applyEvent", events.applyEvent);
 
+//Student Events
+router.get("/studentEvents", actions.getStudentEvents);
+
 
 //Faculty API
 

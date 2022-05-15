@@ -213,7 +213,19 @@ var functions = {
             var token = req.headers["x-access-token"];
             var decodeToken = jwt.decode(token, config.secret);
             var getUserData = await Users.findOne({ email: decodeToken });
-            return res.json({ success: "User Info", user: getUserData }).populate({ path: "events" });
+            return res.json({ success: "User Info", user: getUserData });
+        } else {
+            return res.json({ success: false, msg: 'No Found' });
+
+        }
+    },
+
+    getStudentEvents: async function(req, res) {
+        if (req.headers["x-access-token"]) {
+            var token = req.headers["x-access-token"];
+            var decodeToken = jwt.decode(token, config.secret);
+            var getUserData = await Users.findOne({ email: decodeToken }).populate({ path: "events" });
+            return res.json({ success: "User Info", eventsApplied: getUserData.events });
         } else {
             return res.json({ success: false, msg: 'No Found' });
 
