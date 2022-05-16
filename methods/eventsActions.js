@@ -122,9 +122,13 @@ var functions = {
             return res.status(400).json({ msg: "Events not found" });
         }
 
+        var round = 0;
+
         if (getEvent.status == "open") {
+            console.log(getEvent.rounds.length);
             for (var i = 0; i < getEvent.rounds.length; i++) {
                 if (getEvent.rounds[i]._id == roundID) {
+                    round++;
                     for (var j = 0; j < getEvent.rounds[i].selectedStudends.length; j++) {
                         if (getEvent.rounds[i].selectedStudends[j].email == getUserData.email ||
                             getEvent.rounds[i].selectedStudends[j].systemID == getUserData.systemID) {
@@ -133,13 +137,15 @@ var functions = {
                     }
                     await getEvent.rounds[i].selectedStudends.push(studendData);
                     await getEvent.save();
-                } else {
-                    return res.status(400).json({ msg: "Invalid Round ID" });
-
                 }
             }
         } else {
             return res.status(400).json({ msg: "Event Close" });
+        }
+        if (round == 0) {
+
+            return res.status(400).json({ msg: "Invalid Round ID" });
+
         }
         return res.status(200).json(getEvent);
 

@@ -85,7 +85,7 @@ router.post("/facultyverifyOTP", faculty.verifyOTP);
 router.post("/createEvent", events.createEvent);
 
 //Get All Events
-router.get("/getAllEvents", events.getAllEvents);
+router.get("/ ", events.getAllEvents);
 
 //Store Rounds
 router.post("/createRound", events.createRounds);
