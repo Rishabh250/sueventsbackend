@@ -3,6 +3,7 @@ var jwt = require('jwt-simple');
 var config = require('../config/dbConfig');
 var bcrypt = require("bcrypt");
 const nodemailer = require('nodemailer');
+const Events = require("../models/events");
 
 var functions = {
     addNew: function(req, res) {
@@ -252,6 +253,25 @@ var functions = {
         await getUserData.save();
         return res.status(200).json({ msg: "Image Uploaded" });
 
+    },
+
+    assignFaculty: async function(req, res) {
+        if (!req.body.eventID) {
+            return res.status(400).json({ msg: "Event not found" });
+        }
+        if (!req.body.facultyID) {
+            return res.status(400).json({ msg: "Faculty not provided" });
+        }
+
+        var getEvent = await Events.findOne({ id: req.body.eventID });
+        if (getEvent.status == "open") {
+            var addFaculty = await getEvent.facultyAssigned.push(req.body.facultyID);
+            await getEvent.save();
+            return res.status(200).json(getEvent);
+        } else {
+            return res.status(400);
+
+        }
     }
 
 };

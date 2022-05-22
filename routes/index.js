@@ -75,6 +75,9 @@ router.post("/facultysendOTP", faculty.sendOTP);
 //Verify OTP
 router.post("/facultyverifyOTP", faculty.verifyOTP);
 
+//Faculty Assigned
+router.post("/facultyAssigned", faculty.assignFaculty);
+
 
 
 

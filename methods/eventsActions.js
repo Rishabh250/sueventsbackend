@@ -154,6 +154,9 @@ var functions = {
     },
 
     applyEvent: async function(req, res) {
+        if (!req.headers["x-access-token"]) {
+            return res.status(400).json({ msg: "Please provide token" });
+        }
         if ((!req.body.eventID)) {
             return res.status(400).json({ success: false, msg: "Enter all fields" });
         }
@@ -212,7 +215,7 @@ var functions = {
 
 
     getAllEvents: async function(req, res) {
-        var allEvents = await Events.find({ status: "open" }).populate({ path: "createdBy" });
+        var allEvents = await Events.find({ status: "open" }).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" });
         return res.status(200).json({ events: allEvents });
     },
 

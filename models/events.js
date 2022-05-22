@@ -12,10 +12,8 @@ var eventSchema = new Schema({
     endDate: { type: String },
     eventPrice: { type: String, required: true },
     facultyAssigned: [{
-        email: { type: String },
-        name: { type: String },
-        gender: { type: String },
-        systemID: { type: String },
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Faculty"
     }],
     appliedStudents: [{
         email: { type: String },
