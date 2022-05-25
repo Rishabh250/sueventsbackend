@@ -78,6 +78,9 @@ router.post("/facultyverifyOTP", faculty.verifyOTP);
 //Faculty Assigned
 router.post("/facultyAssigned", faculty.assignFaculty);
 
+//Faculty Upload Image
+router.post("/facultyUploadImage",faculty.uploadImage);
+
 
 
 

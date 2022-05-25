@@ -236,7 +236,8 @@ var functions = {
 
     uploadImage: async function(req, res) {
 
-        var userImage;
+        try{
+            var userImage;
         if (!req.headers["x-access-token"]) {
             return res.status(400).json({ msg: "Please provide token" });
         }
@@ -252,6 +253,10 @@ var functions = {
         var getUserData = await Faculty.findOneAndUpdate({ email: decodeToken }, { profileImage: userImage });
         await getUserData.save();
         return res.status(200).json({ msg: "Image Uploaded" });
+        }
+        catch(e){
+            res.status(400).json({msg : e});
+        }
 
     },
 
