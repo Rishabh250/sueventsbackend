@@ -53,7 +53,7 @@ var functions = {
 
     createRounds: async function(req, res) {
         if ((!req.body.roundNumber) || (!req.body.testType) || (!req.body.lab) || (!req.body.date) || (!req.body.eventID)) {
-            res.json({ success: false, msg: "Enter all fields" });
+            res.status(400).json({ success: false, msg: "Enter all fields" });
             return;
         }
         if (!req.headers["x-access-token"]) {
