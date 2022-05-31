@@ -16,15 +16,13 @@ var eventSchema = new Schema({
         ref: "Faculty"
     }],
     appliedStudents: [{
-        email: { type: String },
-        name: { type: String },
-        gender: { type: String },
-        systemID: { type: String },
-        type: { type: String },
-        course: { type: String },
-        semester: { type: Number },
-        year: { type: Number },
-        userImage: { type: String },
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Student"
+    }],  
+    
+    studentLeft: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Student"
     }],
 
     rounds: [{
@@ -34,17 +32,13 @@ var eventSchema = new Schema({
         testType: { type: String },
         date: { type: String },
         lastRound: { type: Boolean },
+        unselectedStudends: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Student"
+        }],
         selectedStudends: [{
-            email: { type: String },
-            name: { type: String },
-            gender: { type: String },
-
-            systemID: { type: String },
-            type: { type: String },
-            course: { type: String },
-            semester: { type: Number },
-            year: { type: Number },
-            userImage: { type: String },
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Student"
         }]
     }],
     createdBy: [{

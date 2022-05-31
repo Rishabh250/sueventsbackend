@@ -86,7 +86,9 @@ var functions = {
         if (storeRound.status == "close") {
             return res.status(400).json({ msg: "Event Closed" });
         }
+        
         storeRound.rounds.push(createRound);
+        
         await storeRound.save();
         return res.status(200).json(storeRound);
 
@@ -106,16 +108,6 @@ var functions = {
         var decodeToken = jwt.decode(token, config.secret);
         var getUserData = await Users.findOne({ email: decodeToken });
 
-        var studendData = {
-            email: getUserData.email,
-            name: getUserData.name,
-            systemID: getUserData.systemID,
-            type: getUserData.type,
-            course: getUserData.course,
-            year: getUserData.year,
-            semester: getUserData.semester,
-            gender: getUserData.gender,
-        };
 
         var getEvent = await Events.findOne({ _id: eventID });
         if (!getEvent) {
@@ -130,13 +122,15 @@ var functions = {
                 if (getEvent.rounds[i]._id == roundID) {
                     round++;
                     for (var j = 0; j < getEvent.rounds[i].selectedStudends.length; j++) {
-                        if (getEvent.rounds[i].selectedStudends[j].email == getUserData.email ||
-                            getEvent.rounds[i].selectedStudends[j].systemID == getUserData.systemID) {
+                        if (getEvent.rounds[i].selectedStudends[j] == getUserData.id) {
                             return res.status(400).json({ msg: "Already Registered" });
                         }
                     }
-                    await getEvent.rounds[i].selectedStudends.push(studendData);
-                    await getEvent.save();
+                var rrr =   getEvent.rounds[i].unselectedStudends.pull({_id : getUserData.id})
+                console.log(rrr)
+                console.log(getEvent.rounds[i].unselectedStudends);
+                await getEvent.rounds[i].selectedStudends.push(getUserData.id);
+                await getEvent.save();
                 }
             }
         } else {
@@ -171,17 +165,6 @@ var functions = {
         var getUserData = await Users.findOne({ email: decodeToken });
         var eventID = req.body.eventID;
 
-        var studendData = {
-            email: getUserData.email,
-            name: getUserData.name,
-            systemID: getUserData.systemID,
-            type: getUserData.type,
-            course: getUserData.course,
-            year: getUserData.year,
-            semester: getUserData.semester,
-            gender: getUserData.gender,
-        };
-
         var getEvent = await Events.findOne({ _id: eventID });
         if (!getEvent) {
             return res.status(400).json({ msg: "Events not found" });
@@ -189,8 +172,7 @@ var functions = {
 
         if (getEvent.status == "open") {
             for (var j = 0; j < getEvent.appliedStudents.length; j++) {
-                if (getEvent.appliedStudents[j].email == getUserData.email ||
-                    getEvent.appliedStudents[j].systemID == getUserData.systemID) {
+                if (getEvent.appliedStudents[j] == getUserData.id ) {
                     return res.status(400).json({ msg: "Already Registered" });
                 }
             }
@@ -201,12 +183,14 @@ var functions = {
             var getUser = await Users.findOne({ email: getUserData.email });
             await getUser.events.push(storeID);
             getUser.save();
-            console.log(getUser);
-            await getEvent.appliedStudents.push(studendData);
+            await getEvent.appliedStudents.push(getUserData.id);
+            await getEvent.studentLeft.push(getUserData.id);
+            await getEvent.rounds[0].unselectedStudends.push(getUserData.id);
             getEvent.save();
         } else {
             return res.status(400).json({ msg: "Event Close" });
         }
+        
         return res.status(200).json(getEvent);
 
     },
@@ -263,6 +247,35 @@ var functions = {
         await closeEvent.save();
         res.status(200).json({ msg: "Event Close", event: { id: req.body.eventID, title: closeEvent.title } });
     },
+
+    compareEvents : async function(req,res){
+        let events = ["6293acf3134818f700152781","6294c4a0a57789476d15afc4","6294c4a0a51789476d15afc4"];
+        let round = "Aptitude Test"
+        let compareEvents = [];
+        var getRound;
+        
+        for(let k=0 ;k < events.length ;k++){
+            var getEvent = await Events.findOne({ _id: events[k] });
+            for (var i = 0; i < getEvent.rounds.length; i++) {
+                if (getEvent.rounds[i].testType == round) {
+                    getRound = getEvent.rounds[i].selectedStudends;
+
+                    for(var j =0 ; j < getRound.length ; j++){
+                        compareEvents.push(getRound[j]);
+                    }
+                }
+               
+            }
+        }
+
+        compareEvents = compareEvents.filter((value, index, self) =>
+         index === self.findIndex((t) => (
+        t.email === value.email && t.email === value.email
+        ))
+    )
+
+    return res.status(200).json(compareEvents);
+    }
 
 
 };

@@ -108,6 +108,9 @@ router.post("/getSingleRound", events.getSingletRound);
 //Close Event
 router.post("/closeEvent", events.closeEvent);
 
+//Compare Events
+router.post("/compareEvents",events.compareEvents);
+
 
 
 module.exports = router;
