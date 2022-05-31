@@ -103,7 +103,7 @@ router.post("/selectedStudents", events.selectedStudends);
 router.post("/getEventRound", events.getEventRound);
 
 //Single Round
-router.post("/getSingleRound", events.getSingletRound);
+router.post("/getSingleRound", events.getSingleRound);
 
 //Close Event
 router.post("/closeEvent", events.closeEvent);

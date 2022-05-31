@@ -229,12 +229,12 @@ var functions = {
     },
 
 
-    getSingletRound: async function(req, res) {
+    getSingleRound: async function(req, res) {
 
         var eventID = req.body.eventID;
         var roundID = req.body.roundID;
         var getRound;
-        var getEvent = await Events.findOne({ _id: eventID });
+        var getEvent = await Events.findOne({ _id: eventID }).populate({path : "rounds.selectedStudends"});
         for (var i = 0; i < getEvent.rounds.length; i++) {
             if (getEvent.rounds[i]._id == roundID) {
                 getRound = getEvent.rounds[i];
