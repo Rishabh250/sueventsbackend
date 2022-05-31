@@ -225,7 +225,7 @@ var functions = {
             var token = req.headers["x-access-token"];
             var decodeToken = jwt.decode(token, config.secret);
             var getUserData = await Users.findOne({ email: decodeToken }).populate({ path: "events" });
-            return res.json({ success: "User Info", eventsApplied: getUserData.events });
+            return res.json({ success: "User Info", eventsApplied: getUserData.events});
         } else {
             return res.json({ success: false, msg: 'No Found' });
 

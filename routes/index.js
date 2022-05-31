@@ -111,6 +111,9 @@ router.post("/closeEvent", events.closeEvent);
 //Compare Events
 router.post("/compareEvents",events.compareEvents);
 
+//Single Event
+router.post("/singleEvent",events.singleEvent);
+
 
 
 module.exports = router;

@@ -183,9 +183,9 @@ var functions = {
             var getUser = await Users.findOne({ email: getUserData.email });
             await getUser.events.push(storeID);
             getUser.save();
-            await getEvent.appliedStudents.push(getUserData.id);
-            await getEvent.studentLeft.push(getUserData.id);
-            await getEvent.rounds[0].unselectedStudends.push(getUserData.id);
+            await getEvent.appliedStudents.push(getUserData);
+            await getEvent.studentLeft.push(getUserData);
+            await getEvent.rounds[0].unselectedStudends.push(getUserData);
             getEvent.save();
         } else {
             return res.status(400).json({ msg: "Event Close" });
@@ -200,6 +200,15 @@ var functions = {
 
     getAllEvents: async function(req, res) {
         var allEvents = await Events.find({ status: "open" }).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" });
+        return res.status(200).json({ events: allEvents });
+    },
+
+    singleEvent: async function(req, res) {
+        if ((!req.body.eventID)) {
+            return res.status(400).json({ success: false, msg: "Required Event ID" });
+        }
+        let eventID = req.body.eventID;
+        var allEvents = await Events.find().populate({ path: "createdBy" }).populate({ path: "facultyAssigned" }).populate({path : "appliedStudents"});
         return res.status(200).json({ events: allEvents });
     },
 
