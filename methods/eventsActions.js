@@ -72,7 +72,6 @@ var functions = {
 
         }
         var storeRound = await Events.findOne({ _id: eventID });
-        var storeRound = await Events.findOne({ _id: eventID });
         // console.log(await storeRound.studentLeft)
         await Events.findOneAndUpdate({_id: eventID}, { $set : {  studentLeft: [] }}, {multi:true});
             
@@ -93,6 +92,8 @@ var functions = {
         if (storeRound.status == "close") {
             return res.status(400).json({ msg: "Event Closed" });
         }
+
+        if(storeRound.rounds.length > 0){
 
         let selectID = storeRound.rounds[storeRound.rounds.length -1].selectedStudends;
         console.log(selectID)
@@ -120,6 +121,13 @@ var functions = {
         await newRound.push(destArray);
 
         await storeRound.save();
+    }
+    else{
+        await storeRound.rounds.push(createRound);
+        await storeRound.save();
+
+
+    }
     
         return res.status(200).json(storeRound);
 
