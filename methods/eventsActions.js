@@ -72,10 +72,9 @@ var functions = {
 
         }
         var storeRound = await Events.findOne({ _id: eventID });
-        // console.log(await storeRound.studentLeft)
-        var updateStudentList =   await Events.findOneAndUpdate({_id: eventID}, { $set : {  studentLeft: [] }}, {multi:true});
-        updateStudentList.save();
-          console.log(storeRound)  
+
+        await storeRound.set({  studentLeft: [] });
+
         var createRound = {
             lab: req.body.lab,
             date: req.body.date,
@@ -104,19 +103,20 @@ var functions = {
             }
 
            let closeEvent = storeRound.rounds[storeRound.rounds.length -1].set({status : "close"});
-            console.log(selectselectedStudends)
             if(selectselectedStudends !== []){
                 var getAllSelectedStudents = Array.from(selectselectedStudends)
-                await storeRound.studentLeft.push(getAllSelectedStudents)    
+                await storeRound.studentLeft.push(getAllSelectedStudents)  
+                await storeRound.save();
+
             } 
 
             await  storeRound.rounds.push(createRound);
 
-            var getAllstudentLeft = Array.from(storeRound.studentLeft);
-            var newRound = storeRound.rounds[storeRound.rounds.length -1].unselectedStudends;
+            let stdList = storeRound.studentLeft;
+            var getAllstudentLeft = Array.from(stdList);
+            
+            let newRound = storeRound.rounds[storeRound.rounds.length -1].unselectedStudends;
             await newRound.push(getAllstudentLeft);
-
-            await storeRound.save();
     }
     else{
         await storeRound.rounds.push(createRound);
@@ -124,7 +124,7 @@ var functions = {
 
 
     }
-    
+        await storeRound.save();
         return res.status(200).json(storeRound);
 
     },
