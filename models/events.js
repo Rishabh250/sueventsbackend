@@ -28,6 +28,7 @@ var eventSchema = new Schema({
     rounds: [{
 
         roundNumber: { type: Number },
+        status :{type : String},
         lab: { type: String },
         testType: { type: String },
         date: { type: String },
