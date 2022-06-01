@@ -73,10 +73,9 @@ var functions = {
         }
         var storeRound = await Events.findOne({ _id: eventID });
         // console.log(await storeRound.studentLeft)
-        await Events.findOneAndUpdate({_id: eventID}, { $set : {  studentLeft: [] }}, {multi:true});
-            
-        await storeRound.save();
-
+        var updateStudentList =   await Events.findOneAndUpdate({_id: eventID}, { $set : {  studentLeft: [] }}, {multi:true});
+        updateStudentList.save();
+          console.log(storeRound)  
         var createRound = {
             lab: req.body.lab,
             date: req.body.date,
@@ -95,32 +94,29 @@ var functions = {
 
         if(storeRound.rounds.length > 0){
 
-        let selectID = storeRound.rounds[storeRound.rounds.length -1].selectedStudends;
-        console.log(selectID)
+            let selectselectedStudends = storeRound.rounds[storeRound.rounds.length -1].selectedStudends;
 
-        if(selectID.length === 0){
-            storeRound.rounds[storeRound.rounds.length -1].set({status : "close"});
+            if(selectselectedStudends.length === 0){
+                storeRound.rounds[storeRound.rounds.length -1].set({status : "close"});
+                await storeRound.rounds.push(createRound);
+                await storeRound.save();
+                return res.status(200).json(storeRound)
+            }
 
-            await storeRound.rounds.push(createRound);
+           let closeEvent = storeRound.rounds[storeRound.rounds.length -1].set({status : "close"});
+            console.log(selectselectedStudends)
+            if(selectselectedStudends !== []){
+                var getAllSelectedStudents = Array.from(selectselectedStudends)
+                await storeRound.studentLeft.push(getAllSelectedStudents)    
+            } 
+
+            await  storeRound.rounds.push(createRound);
+
+            var getAllstudentLeft = Array.from(storeRound.studentLeft);
+            var newRound = storeRound.rounds[storeRound.rounds.length -1].unselectedStudends;
+            await newRound.push(getAllstudentLeft);
 
             await storeRound.save();
-            return res.status(200).json(storeRound)
-        }
-
-        storeRound.rounds[storeRound.rounds.length -1].set({status : "close"});
-        console.log(selectID)
-        if(selectID !== []){
-            var destArray = Array.from(selectID)
-            await storeRound.studentLeft.push(destArray)    
-        } 
-        
-        await  storeRound.rounds.push(createRound);
-
-        var destArray = Array.from(storeRound.studentLeft);
-        var newRound = storeRound.rounds[storeRound.rounds.length -1].unselectedStudends;
-        await newRound.push(destArray);
-
-        await storeRound.save();
     }
     else{
         await storeRound.rounds.push(createRound);
