@@ -108,8 +108,12 @@ router.post("/getSingleRound", events.getSingleRound);
 //Close Event
 router.post("/closeEvent", events.closeEvent);
 
-//Compare Events
-router.post("/compareEvents",events.compareEvents);
+//Get unselected students 
+router.post("/getUnselectedStudents",events.getUnselectedStudents);
+
+//Get particular events
+router.post("/getSelectedEvents",events.getSelectedEvents);
+
 
 //Single Event
 router.post("/singleEvent",events.singleEvent);

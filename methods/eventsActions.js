@@ -68,7 +68,7 @@ var functions = {
         }
         var token = req.headers["x-access-token"];
         var decodeToken = jwt.decode(token, config.secret);
-        var getUserData = await Users.findOne({ email: decodeToken });
+        var getUserData = await Faculty.findOne({ email: decodeToken });
         var getlastRound;
 
         var eventID = req.body.eventID;
@@ -346,34 +346,61 @@ var functions = {
         }
     },
 
-    compareEvents : async function(req,res){
+    getSelectedEvents : async function(req,res){
         try{
-        let events = ["6293acf3134818f700152781","6294c4a0a57789476d15afc4","6294c4a0a51789476d15afc4"];
-        let round = "Aptitude Test"
-        let compareEvents = [];
-        var getRound;
-        
-        for(let k=0 ;k < events.length ;k++){
-            var getEvent = await Events.findOne({ _id: events[k] });
-            for (var i = 0; i < getEvent.rounds.length; i++) {
-                if (getEvent.rounds[i].testType == round) {
-                    getRound = getEvent.rounds[i].selectedStudends;
-
-                    for(var j =0 ; j < getRound.length ; j++){
-                        compareEvents.push(getRound[j]);
-                    }
-                }
-               
+            let eventList =[];
+            if(!req.body.roundType){
+                return res.status(400).json({msg : "Enter round type"})
             }
+
+            let allEvents = await Events.find({status : "close"}).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" });
+            for(let i = 0 ; i < allEvents.length ; i++){
+                for(let j =0; j < allEvents[i].rounds.length; j++){
+                    if(allEvents[i].rounds[j].testType === req.body.roundType){
+                     eventList.push(allEvents[i])
+
+                    } 
+                }
+            }
+            return res.status(200).json(eventList);
         }
+        catch(e)
+        {
+            console.log(e)
+            return res.status(403).json({msg : "Something went wrong"})  
+        }
+    },
 
-        compareEvents = compareEvents.filter((value, index, self) =>
-         index === self.findIndex((t) => (
-        t.email === value.email && t.email === value.email
-        ))
+    getUnselectedStudents : async function(req,res){
+        try{
+            let events = req.body.eventList;
+            let round = req.body.roundType
+            let compareEvents = [];
+            var getRound;
+            
+            for(let k=0 ;k < events.length ;k++){
+                var getEvent = await Events.findOne({ _id: events[k] }).populate({path : "rounds.unselectedStudends"})
+                for (var i = 0; i < getEvent.rounds.length; i++) {
+                    if (getEvent.rounds[i].testType == round) {
+                        getRound = getEvent.rounds[i].unselectedStudends;
+    
+                        for(var j =0 ; j < getRound.length ; j++){
+                            compareEvents.push(getRound[j]);
+                        }
+                    }
+                
+                }
+            }
+    
+            compareEvents = compareEvents.filter((value, index, self) =>
+             index === self.findIndex((t) => (
+            t.email === value.email && t.email === value.email
+            ))
     )
-
-        return res.status(200).json(compareEvents);
+            // let unselectedList = compareEvents.populate()
+            // console.log(unselectedList)
+    
+            return res.status(200).json(compareEvents);
         }
         catch(e){
             console.log(e)
