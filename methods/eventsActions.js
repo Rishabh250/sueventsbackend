@@ -79,7 +79,12 @@ var functions = {
 
         }
         var storeRound = await Events.findOne({ _id: eventID });
-
+        if(!storeRound){
+            return res.status(400).json({msg : "Event not found"})
+        }
+        if(storeRound.status === "close"){
+            return res.status(400).json({msg : "Event close"})
+        }
         await storeRound.set({  studentLeft: [] });
 
         var createRound = {
