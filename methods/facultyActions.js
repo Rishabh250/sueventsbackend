@@ -7,7 +7,8 @@ const Events = require("../models/events");
 
 var functions = {
     addNew: function(req, res) {
-        let userImage;
+        try{
+            let userImage;
         type = req.body.type;
         if (type == "Student") {
             checkEmail = req.body.email.split(".");
@@ -75,9 +76,18 @@ var functions = {
             });
 
         }
+        }
+        catch(e){
+            console.log(e)
+            return res.status(403).json({msg : "Something went wrong"})
+        }
     },
-    authorization: function(req, res) {
-        Faculty.findOne({
+    authorization:async function(req, res) {
+       try{
+        if(!req.body.email || !req.body.password){
+            return res.status(400).json({msg : "Enter all fields"});
+        }
+        await Faculty.findOne({
             email: req.body.email
         }, function(err, user) {
             if (err) {
@@ -99,183 +109,237 @@ var functions = {
                 });
             }
         });
+       }
+       catch(e){
+           console.log(e)
+            return res.status(403).json({msg : "Something went wrong"})
+       }
     },
     sendOTP: async function(req, res) {
-        Faculty.findOne({
-            email: req.body.email
-        }, function(err, user) {
-            if (err) {
-                console.log(err);
-                throw err;
+        try{
+            if(!req.body.email){
+                return res.status(400).json({msg : "Enter all fields"});
             }
-            if (!user) {
-                return res.status(403).send({ success: false, msg: "user not found" });
-            } else {
-
-                var userEmail = req.body.email;
-                let mailTransporter = nodemailer.createTransport({
-                    service: 'gmail',
-                    auth: {
-                        user: 'rishu25bansal@gmail.com',
-                        pass: "ugmmbvbnfcppjvek"
-                    }
-                });
-                var finalOTP = Math.floor(100000 + Math.random() * 900000);
-
-                let mailDetails = {
-                    from: 'rishu25bansal@gmail.com',
-                    to: userEmail,
-                    subject: 'Test mail',
-                    text: 'OTP for password reset is ' + finalOTP
-                };
-                mailTransporter.sendMail(mailDetails, async function(err, data) {
-                    if (err) {
-                        console.log(err);
-                        res.status(400).json({ msg: err });
-                    } else {
-                        var user = await Faculty.findOne({ email: userEmail });
-                        user.otp = finalOTP;
-                        await user.save();
-                        res.status(200).json({ msg: "OTP Send" });
-
-                    }
-                });
-
-
-            }
-        });
+            Faculty.findOne({
+                email: req.body.email
+            }, function(err, user) {
+                if (err) {
+                    console.log(err);
+                    throw err;
+                }
+                if (!user) {
+                    return res.status(403).send({ success: false, msg: "user not found" });
+                } else {
+    
+                    var userEmail = req.body.email;
+                    let mailTransporter = nodemailer.createTransport({
+                        service: 'gmail',
+                        auth: {
+                            user: 'rishu25bansal@gmail.com',
+                            pass: "ugmmbvbnfcppjvek"
+                        }
+                    });
+                    var finalOTP = Math.floor(100000 + Math.random() * 900000);
+    
+                    let mailDetails = {
+                        from: 'rishu25bansal@gmail.com',
+                        to: userEmail,
+                        subject: 'Test mail',
+                        text: 'OTP for password reset is ' + finalOTP
+                    };
+                    mailTransporter.sendMail(mailDetails, async function(err, data) {
+                        if (err) {
+                            console.log(err);
+                            res.status(400).json({ msg: err });
+                        } else {
+                            var user = await Faculty.findOne({ email: userEmail });
+                            user.otp = finalOTP;
+                            await user.save();
+                            res.status(200).json({ msg: "OTP Send" });
+    
+                        }
+                    });
+    
+    
+                }
+            });
+        }
+        catch(e){
+            console.log(e)
+            return res.status(403).json({msg : "Something went wrong"})
+        }
     },
 
     verifyOTP: async function(req, res) {
-        Faculty.findOne({ email: req.body.email }, async function(err, user) {
-            if (err) {
-                throw err;
-            }
-            if (!user) {
-                return res.status(403).send({ success: false, msg: "user not found" });
-            } else {
-                if ((!req.body.otp)) {
-                    res.status(400).json({ msg: "Invalid OTP" });
-                    return;
+        try{
+            Faculty.findOne({ email: req.body.email }, async function(err, user) {
+                if (err) {
+                    throw err;
                 }
-                if ((!req.body.email)) {
-                    res.status(400).json({ msg: "Email Required" });
-                    return;
+                if (!user) {
+                    return res.status(403).send({ success: false, msg: "user not found" });
                 } else {
-
-
-                    var otpVerify = req.body.otp;
-
-                    var getUser = await Faculty.findOne({ email: req.body.email });
-                    //    console.log(getUser.otp);
-                    if (getUser.otp == otpVerify) {
-                        await Faculty.updateOne({ email: req.body.email }, { $unset: { otp: otpVerify } });
-                        return res.status(200).json({ msg: "OTP Verified" });
-
-                    } else {
-                        return res.status(400).json({ msg: "Invalid OTP" });
-
+                    if ((!req.body.otp)) {
+                        res.status(400).json({ msg: "Invalid OTP" });
+                        return;
                     }
-
-
-
+                    if ((!req.body.email)) {
+                        res.status(400).json({ msg: "Email Required" });
+                        return;
+                    } else {
+    
+    
+                        var otpVerify = req.body.otp;
+    
+                        var getUser = await Faculty.findOne({ email: req.body.email });
+                        //    console.log(getUser.otp);
+                        if (getUser.otp == otpVerify) {
+                            await Faculty.updateOne({ email: req.body.email }, { $unset: { otp: otpVerify } });
+                            return res.status(200).json({ msg: "OTP Verified" });
+    
+                        } else {
+                            return res.status(400).json({ msg: "Invalid OTP" });
+    
+                        }
+    
+    
+    
+                    }
                 }
-            }
-        });
+            });
+        }
+        catch(e){
+            console.log(e)
+            return res.status(403).json({msg : "Something went wrong"})
+        }
     },
 
     forgetPassword: async function(req, res) {
-        Faculty.findOne({
-            email: req.body.email
-        }, function(err, user) {
-            if (err) {
-                throw err;
-            }
-            if (!user) {
-                return res.status(403).send({ success: false, msg: "user not found" });
-            } else {
-
-
-                const passwordHash = bcrypt.hashSync(req.body.password, 10);
-                Faculty.findOneAndUpdate({ email: req.body.email }, { password: passwordHash }, (err, data) => {
-                    if (err) {
-                        throw err;
-                    }
-                    return res.status(200).send({ msg: "Password Reset", "user": { email: req.body.email, password: passwordHash } });
-                });
-            }
-        });
+        try{
+            Faculty.findOne({
+                email: req.body.email
+            }, function(err, user) {
+                if (err) {
+                    throw err;
+                }
+                if (!user) {
+                    return res.status(403).send({ success: false, msg: "user not found" });
+                } else {
+    
+    
+                    const passwordHash = bcrypt.hashSync(req.body.password, 10);
+                    Faculty.findOneAndUpdate({ email: req.body.email }, { password: passwordHash }, (err, data) => {
+                        if (err) {
+                            throw err;
+                        }
+                        return res.status(200).send({ msg: "Password Reset", "user": { email: req.body.email, password: passwordHash } });
+                    });
+                }
+            });
+        }
+        catch(e){
+            console.log(e)
+            return res.status(403).json({msg : "Something went wrong"})
+        }
     },
     getUserInfo: async function(req, res) {
-        if (req.headers["x-access-token"]) {
-            var token = req.headers["x-access-token"];
-            var decodeToken = jwt.decode(token, config.secret);
-            var getUserData = await Faculty.findOne({ email: decodeToken });
-            return res.json({ success: "User Info", user: getUserData });
-        } else {
-            return res.json({ success: false, msg: 'No Found' });
-
+        try{
+            if (req.headers["x-access-token"]) {
+                var token = req.headers["x-access-token"];
+                var decodeToken = jwt.decode(token, config.secret);
+                var getUserData = await Faculty.findOne({ email: decodeToken });
+                return res.json({ success: "User Info", user: getUserData });
+            } else {
+                return res.json({ success: false, msg: 'No Found' });
+    
+            }
+        }
+        catch(e){
+            console.log(e)
+            return res.status(403).json({msg : "Something went wrong"})
         }
     },
 
     getAllUser: async function(req, res) {
-        var getAllUserData = await Faculty.find({}).populate({ path: "eventsCreated" });
-        return res.json({ "user": getAllUserData });
+        try{
+            var getAllUserData = await Faculty.find({}).populate({ path: "eventsCreated" });
+            return res.json({ "user": getAllUserData });
+        }
+        catch(e){
+            console.log(e)
+            return res.status(403).json({msg : "Something went wrong"})
+        }
     },
 
     singleUser: async function(req, res) {
 
-        if (!req.headers["x-access-token"]) {
-            return res.status(400).json({ msg: "Please provide token" });
+        try{
+            if (!req.headers["x-access-token"]) {
+                return res.status(400).json({ msg: "Please provide token" });
+            }
+            var token = req.headers["x-access-token"];
+            var decodeToken = jwt.decode(token, config.secret);
+            var getUserData = await Faculty.findOne({ email: decodeToken }).populate({ path: "eventsCreated" });
+            return res.json({ "user": getUserData });
         }
-        var token = req.headers["x-access-token"];
-        var decodeToken = jwt.decode(token, config.secret);
-        var getUserData = await Faculty.findOne({ email: decodeToken }).populate({ path: "eventsCreated" });
-        return res.json({ "user": getUserData });
+        catch(e){
+            console.log(e)
+            return res.status(403).json({msg : "Something went wrong"})
+        }
     },
 
     uploadImage: async function(req, res) {
 
         try{
             var userImage;
-        if (!req.headers["x-access-token"]) {
-            return res.status(400).json({ msg: "Please provide token" });
-        }
-        if (!req.body.profileImage) {
 
-            return res.status(400).json({ msg: "Please upload a profile image" });
-        } else {
-            userImage = req.body.profileImage;
-        }
+            if (!req.headers["x-access-token"]) {
+                return res.status(400).json({ msg: "Please provide token" });
+            }
 
-        var token = req.headers["x-access-token"];
-        var decodeToken = jwt.decode(token, config.secret);
-        var getUserData = await Faculty.findOneAndUpdate({ email: decodeToken }, { profileImage: userImage });
-        await getUserData.save();
-        return res.status(200).json({ msg: "Image Uploaded" });
+            if (!req.body.profileImage) {
+                return res.status(400).json({ msg: "Please upload a profile image" });
+            } 
+            else {
+                userImage = req.body.profileImage;
+            }
+
+            var token = req.headers["x-access-token"];
+            var decodeToken = jwt.decode(token, config.secret);
+            var getUserData = await Faculty.findOneAndUpdate({ email: decodeToken }, { profileImage: userImage });
+            await getUserData.save();
+            return res.status(200).json({ msg: "Image Uploaded" });
         }
         catch(e){
-            res.status(400).json({msg : e});
+            console.log(e)
+            return res.status(403).json({msg : "Something went wrong"});
         }
 
     },
 
     assignFaculty: async function(req, res) {
-        if (!req.body.eventID) {
-            return res.status(400).json({ msg: "Event not found" });
-        }
-        if (!req.body.facultyID) {
-            return res.status(400).json({ msg: "Faculty not provided" });
-        }
-
-        var getEvent = await Events.findOne({ id: req.body.eventID });
-        if (getEvent.status == "open") {
-            var addFaculty = await getEvent.facultyAssigned.push(req.body.facultyID);
-            await getEvent.save();
-            return res.status(200).json(getEvent);
-        } else {
-            return res.status(400);
-
+        try{
+            if (!req.body.eventID) {
+                return res.status(400).json({ msg: "Event not found" });
+            }
+            if (!req.body.facultyID) {
+                return res.status(400).json({ msg: "Faculty not provided" });
+            }
+    
+            var getEvent = await Events.findOne({ id: req.body.eventID });
+            if (getEvent.status == "open") {
+                var addFaculty = await getEvent.facultyAssigned.push(req.body.facultyID);
+                await getEvent.save();
+                return res.status(200).json(getEvent);
+            } else {
+                return res.status(400);
+    
+            }
+    
+        }    
+        catch(e){
+            console.log(e)
+            return res.status(403).json({msg : "Something went wrong"})
         }
     }
 
