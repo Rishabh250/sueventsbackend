@@ -323,18 +323,17 @@ var functions = {
             console.log(eventID)
             let getEvent = await Events.findOne({_id: eventID});
             console.log(getEvent)
-            // if (getEvent.status === "open") {
-            //     let facultyList = req.body.facultyID
-            //     for(let i=0; i<facultyList.length ; i++  ){
-            //         await getEvent.facultyAssigned.push(facultyList[i]);
-            //     }
-                
-            // } else {
-            //     return res.status(400);
+            if (getEvent.status === "open") {
+                let facultyList = req.body.facultyID
+                for(let i=0; i<facultyList.length ; i++  ){
+                    await getEvent.facultyAssigned.push(facultyList[i]);
+                }
+                await getEvent.save();
+                return res.status(200).json(getEvent);
+            } else {
+                return res.status(400);
     
-            // }
-            await getEvent.save();
-            return res.status(200).json(getEvent);
+            }
     
         }    
         catch(e){
