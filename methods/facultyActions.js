@@ -326,6 +326,7 @@ var functions = {
                 let facultyList = req.body.facultyID
                 for(let i=0; i<facultyList.length ; i++  ){
                     var addFaculty = await getEvent.facultyAssigned.push(facultyList[i]);
+                    console.log(addFaculty)
                 }
                 await getEvent.save();
                 return res.status(200).json(getEvent);
