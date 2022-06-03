@@ -83,28 +83,26 @@ var functions = {
     },
     authorization:async function(req, res) {
        try{
-        await Faculty.findOne({
-            email: req.body.email
-        }, function(err, user) {
-            if (err) {
-                throw err;
-            }
-            if (!user) {
-                res.status(403).send({ success: false, msg: "user not found" });
-            } else {
-
-
-                user.comparePassword(req.body.password, function(err, isMatch) {
-                    if (isMatch && !err) {
-                        var token = jwt.encode(user.email, config.secret);
-                        res.json({ success: true, token: token });
-                        return;
-                    } else {
-                        return res.status(403).json({ success: false, msg: "Password wrong" });
-                    }
-                });
-            }
-        });
+            Faculty.findOne({
+                email: req.body.email
+            }, function(err, user) {
+                if (err) {
+                    throw err;
+                }
+                if (!user) {
+                    res.status(403).send({ success: false, msg: "user not found" });
+                } else {
+                        user.comparePassword(req.body.password, function(err, isMatch) {
+                        if (isMatch && !err) {
+                            var token = jwt.encode(user.email, config.secret);
+                            res.json({ success: true, token: token });
+                            return;
+                        } else {
+                            return res.status(403).json({ success: false, msg: "Password wrong" });
+                        }
+                    });
+                }
+            });
        }
        catch(e){
            console.log(e)
