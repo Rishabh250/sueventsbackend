@@ -321,7 +321,7 @@ var functions = {
             }
             let eventID = req.body.eventID;
             console.log(eventID)
-            let getEvent = await Events.findOne({id: eventID});
+            let getEvent = await Events.findOne({_id: eventID});
             console.log(getEvent)
             // if (getEvent.status === "open") {
             //     let facultyList = req.body.facultyID
@@ -334,7 +334,7 @@ var functions = {
     
             // }
             await getEvent.save();
-                return res.status(200).json(getEvent);
+            return res.status(200).json(getEvent);
     
         }    
         catch(e){
