@@ -39,9 +39,8 @@ var functions = {
             return;
         } else {
 
-            if (!(req.body.profileImage)) {
+        if (!(req.body.profileImage)) {
                 userImage = "";
-
             }
 
             Faculty.findOne({ email: req.body.email }).then((err) => {
@@ -84,9 +83,6 @@ var functions = {
     },
     authorization:async function(req, res) {
        try{
-        if(!req.body.email || !req.body.password){
-            return res.status(400).json({msg : "Enter all fields"});
-        }
         await Faculty.findOne({
             email: req.body.email
         }, function(err, user) {
