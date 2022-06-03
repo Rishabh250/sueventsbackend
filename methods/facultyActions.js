@@ -319,15 +319,16 @@ var functions = {
             if (!req.body.facultyID) {
                 return res.status(400).json({ msg: "Faculty not provided" });
             }
-            console.log(req.body.eventID)
-            var getEvent = await Events.findOne({id: req.body.eventID});
+            let eventID = req.body.eventID;
+            console.log(eventID)
+            let getEvent = await Events.findOne({id: eventID});
             console.log(getEvent)
             if (getEvent.status === "open") {
                 let facultyList = req.body.facultyID
                 for(let i=0; i<facultyList.length ; i++  ){
-                    var addFaculty = await getEvent.facultyAssigned.push(facultyList[i]);
-                    console.log(addFaculty)
+                    await getEvent.facultyAssigned.push(facultyList[i]);
                 }
+                console.log(addFaculty)
                 await getEvent.save();
                 return res.status(200).json(getEvent);
             } else {
