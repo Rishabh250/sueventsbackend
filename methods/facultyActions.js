@@ -320,9 +320,13 @@ var functions = {
                 return res.status(400).json({ msg: "Faculty not provided" });
             }
     
-            var getEvent = await Events.findOne({ id: req.body.eventID });
-            if (getEvent.status == "open") {
-                var addFaculty = await getEvent.facultyAssigned.push(req.body.facultyID);
+            var getEvent = await Events.findOne({ id: req.body.eventID});
+            if (getEvent.status === "open") {
+                let facultyList = req.body.facultyID
+
+                for(let i=0; i<facultyList.length ; i++  ){
+                    var addFaculty = await getEvent.facultyAssigned.push(facultyList[i]);
+                }
                 await getEvent.save();
                 return res.status(200).json(getEvent);
             } else {
