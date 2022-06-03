@@ -320,9 +320,8 @@ var functions = {
                 return res.status(400).json({ msg: "Faculty not provided" });
             }
             let eventID = req.body.eventID;
-            console.log(eventID)
             let getEvent = await Events.findOne({_id: eventID});
-            console.log(getEvent)
+           
             if (getEvent.status === "open") {
                 let facultyList = req.body.facultyID
                 for(let i=0; i<facultyList.length ; i++  ){
