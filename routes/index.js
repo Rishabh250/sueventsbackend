@@ -118,6 +118,7 @@ router.post("/getSelectedEvents",events.getSelectedEvents);
 
 //Single Event
 router.post("/singleEvent",events.singleEvent);
+router.post("/singleEventFaculty",events.eventsFacultyAssigned);
 
 
 
