@@ -42,6 +42,9 @@ var functions = {
         if (!(req.body.profileImage)) {
                 userImage = "";
             }
+            else{
+                userImage = req.body.profileImage
+            }
 
             Faculty.findOne({ email: req.body.email }).then((err) => {
                 if (err) {
@@ -241,7 +244,7 @@ var functions = {
             if (req.headers["x-access-token"]) {
                 var token = req.headers["x-access-token"];
                 var decodeToken = jwt.decode(token, config.secret);
-                var getUserData = await Faculty.findOne({ email: decodeToken });
+                var getUserData = await Faculty.findOne({ email: decodeToken }).populate({path : "assignedEvents"}).populate({path : "eventsCreated"});
                 return res.json({ success: "User Info", user: getUserData });
             } else {
                 return res.json({ success: false, msg: 'No Found' });
