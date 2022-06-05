@@ -91,7 +91,8 @@ router.post("/facultyUploadImage",faculty.uploadImage);
 router.post("/createEvent", events.createEvent);
 
 //Get All Events
-router.get("/getAllEvents", events.getAllEvents);
+router.get("/getPlacementEvents", events.getPlacementEvents);
+router.get("/getGeneralEvents", events.getGeneralEvents);
 
 //Store Rounds
 router.post("/createRound", events.createRounds);
