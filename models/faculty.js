@@ -17,6 +17,10 @@ const facultySchema = new Schema({
     eventsCreated: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Events"
+    }],
+    assignedEvents: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Events"
     }]
 
 

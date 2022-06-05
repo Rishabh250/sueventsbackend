@@ -321,11 +321,13 @@ var functions = {
             }
             let eventID = req.body.eventID;
             let getEvent = await Events.findOne({_id: eventID});
-           
             if (getEvent.status === "open") {
                 let facultyList = req.body.facultyID
                 for(let i=0; i<facultyList.length ; i++  ){
                     await getEvent.facultyAssigned.push(facultyList[i]);
+                  var getFaculty =  await Faculty.findOne({_id : facultyList[i]});
+                  await getFaculty.assignedEvents.push(eventID);
+                  getFaculty.save();
                 }
                 await getEvent.save();
                 return res.status(200).json(getEvent);
