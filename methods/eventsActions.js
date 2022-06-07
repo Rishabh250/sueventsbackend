@@ -360,6 +360,7 @@ var functions = {
 
         
         if(finalDate.toString() === date.toString() && getHours >= finalHour && getMinutes >= finalMinute){
+            console.log("first" )
             await getRound[getRound.length - 1].set({showQRCode : "true"})
             await getEvent.save();
         }
