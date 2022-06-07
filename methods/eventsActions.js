@@ -351,11 +351,6 @@ var functions = {
         if(isPM[1] === "PM"){
             finalHour = Number(time[0]) + 12
             finalMinute = Number(isPM[0])
-            console.log(finalHour)
-            console.log(finalMinute)
-
-            console.log(getHours)
-            console.log(getMinutes)
         }
         else{
             finalHour = Number(time[0])
