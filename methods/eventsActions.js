@@ -351,20 +351,17 @@ var functions = {
         if(isPM[1] === "PM"){
             finalHour = Number(time[0]) + 12
             finalMinute = Number(isPM[0])
-            // console.log(finalHour)
-            // console.log(finalMinute)
+            console.log(finalHour)
+            console.log(finalMinute)
 
-            // console.log(getHours)
-            // console.log(getMinutes)
+            console.log(getHours)
+            console.log(getMinutes)
         }
         else{
             finalHour = Number(time[0])
             finalMinute = Number(isPM[0]) 
         }
-        var theDate = new Date(Date.parse(
-            '06/14/2020 4:41:48 PM UTC'));
- 
-    console.log(theDate.toLocaleString())
+
         
         if(finalDate.toString() === date.toString() && getHours >= finalHour && getMinutes >= finalMinute){
             console.log("first" )
