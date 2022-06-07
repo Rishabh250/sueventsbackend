@@ -330,7 +330,7 @@ var functions = {
             
         var eventID = req.body.eventID;
 
-        var getEvent = await Events.findOne({ _id: eventID });
+        var getEvent = await Events.findOne({ _id: eventID }).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" }).populate({path : "appliedStudents"}).populate({path : "rounds.unselectedStudends"}).populate({path : "rounds.selectedStudends"});;
         if (!getEvent) {
             return res.status(400).json({ msg: "Events not found" });
         }
