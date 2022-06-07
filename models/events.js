@@ -32,6 +32,7 @@ var eventSchema = new Schema({
         lab: { type: String },
         testType: { type: String },
         date: { type: String },
+        time: { type: String },
         lastRound: { type: Boolean },
         unselectedStudends: [{
             type: mongoose.Schema.Types.ObjectId,

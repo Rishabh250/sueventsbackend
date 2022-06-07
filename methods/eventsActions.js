@@ -59,7 +59,7 @@ var functions = {
 
     createRounds: async function(req, res) {
        try{
-        if ((!req.body.testType) || (!req.body.lab) || (!req.body.date) || (!req.body.eventID)) {
+        if ((!req.body.testType) || (!req.body.lab) || (!req.body.date) || (!req.body.eventID)|| (!req.body.time)) {
             res.status(400).json({ success: false, msg: "Enter all fields" });
             return;
         }
@@ -90,6 +90,7 @@ var functions = {
         var createRound = {
             lab: req.body.lab,
             date: req.body.date,
+            time : req.body.time,
             status : "open",
             roundNumber: storeRound.rounds.length +1,
             testType: req.body.testType,
