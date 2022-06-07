@@ -294,7 +294,7 @@ var functions = {
                 return res.status(400).json({ msg: "Please provide token" });
             }
 
-            if (!req.body.profileImage) {
+            if (!reqgetAllEvents.body.profileImage) {
                 return res.status(400).json({ msg: "Please upload a profile image" });
             } 
             else {
@@ -344,7 +344,26 @@ var functions = {
             console.log(e)
             return res.status(403).json({msg : "Something went wrong"})
         }
-    }
+    },
+    getAllEvents : async function(req,res){
+        try{
+            if (req.headers["x-access-token"]) {
+                var token = req.headers["x-access-token"];
+                var decodeToken = jwt.decode(token, config.secret);
+                var getUserData = await Faculty.findOne({ email: decodeToken }).populate({path : "assignedEvents"})
+                return res.json({ success: "events", eventsAssigned: getUserData.assignedEvents });
+            } else {
+                return res.json({ success: false, msg: 'No Found' });
+    
+            }
+        }
+        catch(e){
+            console.log(e)
+            return res.status(403).json({msg : "Something went wrong"})
+        }
+        },
+
+    
 
 };
 

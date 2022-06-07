@@ -12,7 +12,6 @@ router.get('/', (req, res) => {
 
 //Student API
 
-
 //Register User
 router.post("/createUser", actions.addNew);
 
@@ -81,6 +80,9 @@ router.post("/facultyAssigned", faculty.assignFaculty);
 //Faculty Upload Image
 router.post("/facultyUploadImage",faculty.uploadImage);
 
+//
+router.get("/getAssignedEvents",faculty.getAllEvents);
+
 
 
 
@@ -90,7 +92,7 @@ router.post("/facultyUploadImage",faculty.uploadImage);
 //Create Event
 router.post("/createEvent", events.createEvent);
 
-//Get All Events
+//Get Events
 router.get("/getPlacementEvents", events.getPlacementEvents);
 router.get("/getGeneralEvents", events.getGeneralEvents);
 
@@ -118,6 +120,8 @@ router.post("/getSelectedEvents",events.getSelectedEvents);
 
 //Single Event
 router.post("/singleEvent",events.singleEvent);
+
+//
 router.post("/singleEventFaculty",events.eventsFacultyAssigned);
 
 
