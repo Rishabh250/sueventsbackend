@@ -344,19 +344,19 @@ var functions = {
         
         
         var todayDate = new Date().toISOString().slice(0, 10).toString().split("-");
-        var getTime = new Date().toLocaleString();
+        var getTime = new Date().toLocaleTimeString().toString().split(":");
         var getHours= getTime[0];
         var getMinutes= getTime[1];
         var finalDate = todayDate[2] +" "+ months[Number(todayDate[1]-1)]+", "+ todayDate[0]
 
 
-        console.log(getTime)
+        console.log(Intl.DateTimeFormat().resolvedOptions().timeZone)
 
 
         if(isPM[1] === "PM"){
 
             finalHour = Number(time[0]) + 12
-            finalMinute = Number(isPM[0])
+            finalMinute = Number(isPM[0]) * 5.5
 
            
             console.log(getTime)
