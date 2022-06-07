@@ -94,7 +94,8 @@ var functions = {
             status : "open",
             roundNumber: storeRound.rounds.length +1,
             testType: req.body.testType,
-            lastRound: getlastRound
+            lastRound: getlastRound,
+            showQRCode: "false",
 
         };
         if (!storeRound) {
@@ -323,7 +324,7 @@ var functions = {
         var getRound = getEvent.rounds;
 
 
-        return res.status(200).json(getRound);
+        return res.status(200).json({"events" : getRound});
         }
         catch(e){
             console.log(e)
