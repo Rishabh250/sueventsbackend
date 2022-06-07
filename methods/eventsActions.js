@@ -344,28 +344,16 @@ var functions = {
         
         
         var todayDate = new Date().toISOString().slice(0, 10).toString().split("-");
-        var getTime = new Date().toLocaleTimeString().toString().split(":");
-        var getHours= new Date().toLocaleTimeString();
-        var getMinutes= new Date().getMinutes();
+        var getHours= new Date().getHours().toLocaleString();
+        var getMinutes= new Date().getMinutes().toLocaleString();
         var finalDate = todayDate[2] +" "+ months[Number(todayDate[1]-1)]+", "+ todayDate[0]
 
         if(isPM[1] === "PM"){
-
-            finalHour = Number(time[0]) + 12 + 6
-            finalMinute = Number(isPM[0]) + 40
-
-           
-            console.log(getHours)
-            console.log(getMinutes)
-        }   
-        
-        if(isPM[1] === "AM"){
-
-            finalHour = Number(time[0])
+            finalHour = Number(time[0]) + 12
             finalMinute = Number(isPM[0])
-
             console.log(finalHour)
             console.log(finalMinute)
+
             console.log(getHours)
             console.log(getMinutes)
         }
