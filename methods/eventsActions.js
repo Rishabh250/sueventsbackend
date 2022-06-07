@@ -330,21 +330,36 @@ var functions = {
             
         var eventID = req.body.eventID;
 
-        var getEvent = await Events.findOne({ _id: eventID }).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" }).populate({path : "appliedStudents"}).populate({path : "rounds.unselectedStudends"}).populate({path : "rounds.selectedStudends"});;
+        var getEvent = await Events.findOne({ _id: eventID }).populate({path : "rounds.unselectedStudends"}).populate({path : "rounds.selectedStudends"})
         if (!getEvent) {
             return res.status(400).json({ msg: "Events not found" });
         }
         var getRound = getEvent.rounds;
-        var time = getRound[getRound.length - 1].time;
-        var date = getRound[getRound.length - 1].date;
 
+
+        var time = getRound[getRound.length - 1].time.toString().split(":");
+        var date = getRound[getRound.length - 1].date;
+        var isPM = time[1].split(" ")
+        var finalHour,finalMinute;
+        
+        
         var todayDate = new Date().toISOString().slice(0, 10).toString().split("-");
+        var getHours= new Date().getHours();
+        var getMinutes= new Date().getMinutes();
         var finalDate = todayDate[2] +" "+ months[Number(todayDate[1]-1)]+", "+ todayDate[0]
-        console.log(date)
-        console.log(finalDate)
+
+        if(isPM[1] === "PM"){
+            finalHour = Number(time[0]) + 12
+            finalMinute = Number(isPM[0])
+            console.log(finalHour)
+            console.log(finalMinute)
+
+            // console.log(getHours)
+            // console.log(getMinutes)
+        }
 
         
-        if(finalDate.toString() === date.toString()){
+        if(finalDate.toString() === date.toString() && getHours >= finalHour && getMinutes >= finalMinute){
             await getRound[getRound.length - 1].set({showQRCode : "true"})
             await getEvent.save();
         }
