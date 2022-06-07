@@ -6,7 +6,20 @@ var jwt = require('jwt-simple');
 var config = require('../config/dbConfig');
 const { json } = require("body-parser");
 
-
+var months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+  ];
 
 var functions = {
     createEvent: async function(req, res) {
@@ -322,7 +335,19 @@ var functions = {
             return res.status(400).json({ msg: "Events not found" });
         }
         var getRound = getEvent.rounds;
+        var time = getRound[getRound.length - 1].time;
+        var date = getRound[getRound.length - 1].date;
 
+        var todayDate = new Date().toISOString().slice(0, 10).toString().split("-");
+        var finalDate = todayDate[2] +" "+ months[Number(todayDate[1]-1)]+", "+ todayDate[0]
+        console.log(date)
+        console.log(finalDate)
+
+        
+        if(finalDate.toString() === date.toString()){
+            await getRound[getRound.length - 1].set({showQRCode : "true"})
+            await getEvent.save();
+        }
 
         return res.status(200).json({"events" : getRound});
         }
