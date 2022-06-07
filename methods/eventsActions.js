@@ -349,13 +349,25 @@ var functions = {
         var finalDate = todayDate[2] +" "+ months[Number(todayDate[1]-1)]+", "+ todayDate[0]
 
         if(isPM[1] === "PM"){
+
             finalHour = Number(time[0]) + 12
             finalMinute = Number(isPM[0])
+
             console.log(finalHour)
             console.log(finalMinute)
+            console.log(getHours)
+            console.log(getMinutes)
+        }   
+        
+        if(isPM[1] === "AM"){
 
-            // console.log(getHours)
-            // console.log(getMinutes)
+            finalHour = Number(time[0])
+            finalMinute = Number(isPM[0])
+
+            console.log(finalHour)
+            console.log(finalMinute)
+            console.log(getHours)
+            console.log(getMinutes)
         }
 
         
