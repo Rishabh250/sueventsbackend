@@ -344,8 +344,9 @@ var functions = {
         
         
         var todayDate = new Date().toISOString().slice(0, 10).toString().split("-");
-        var getHours= new Date().getHours();
-        var getMinutes= new Date().getMinutes();
+        var getTime = new Date().toLocaleTimeString().toString().split(":");
+        var getHours= getTime[0];
+        var getMinutes= getTime[1];
         var finalDate = todayDate[2] +" "+ months[Number(todayDate[1]-1)]+", "+ todayDate[0]
 
         if(isPM[1] === "PM"){
@@ -354,7 +355,7 @@ var functions = {
             finalMinute = Number(isPM[0])
 
            
-            console.log(getHours)
+            console.log(getTime)
             console.log(getMinutes)
         }   
         
