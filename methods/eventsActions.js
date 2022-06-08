@@ -124,6 +124,7 @@ var functions = {
 
             if(selectselectedStudends.length === 0){
                 storeRound.rounds[storeRound.rounds.length -1].set({status : "close"});
+                storeRound.rounds[storeRound.rounds.length -1].set({showQRCode : "false"});
                 await storeRound.rounds.push(createRound);
                 await storeRound.save();
                 return res.status(200).json(storeRound)
