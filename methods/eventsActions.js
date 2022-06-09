@@ -123,8 +123,8 @@ var functions = {
             let selectselectedStudends = storeRound.rounds[storeRound.rounds.length -1].selectedStudends;
 
             if(selectselectedStudends.length === 0){
-                storeRound.rounds[storeRound.rounds.length -1].set({status : "close"});
-                storeRound.rounds[storeRound.rounds.length -1].set({showQRCode : "false"});
+               await  storeRound.rounds[storeRound.rounds.length -1].set({status : "close"});
+                await storeRound.rounds[storeRound.rounds.length -1].set({showQRCode : false});
                 await storeRound.rounds.push(createRound);
                 await storeRound.save();
                 return res.status(200).json(storeRound)
@@ -360,9 +360,14 @@ var functions = {
 
         
         if(finalDate.toString() === date.toString() && getHours >= finalHour && getMinutes >= finalMinute){
-            console.log("first" )
             await getRound[getRound.length - 1].set({showQRCode : "true"})
             await getEvent.save();
+        }
+        else{
+            await getRound[getRound.length - 1].set({showQRCode : "false"})
+            await getEvent.save();
+
+
         }
 
         return res.status(200).json({"events" : getRound});
