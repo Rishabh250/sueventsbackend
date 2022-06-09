@@ -435,7 +435,7 @@ var functions = {
                     } 
                 }
             }
-            return res.status(200).json(eventList);
+            return res.status(200).json({list : eventList});
         }
         catch(e)
         {
