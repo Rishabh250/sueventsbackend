@@ -473,7 +473,7 @@ var functions = {
             // let unselectedList = compareEvents.populate()
             // console.log(unselectedList)
     
-            return res.status(200).json(compareEvents);
+            return res.status(200).json({list:compareEvents});
         }
         catch(e){
             console.log(e)
