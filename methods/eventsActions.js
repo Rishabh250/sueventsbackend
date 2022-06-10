@@ -331,7 +331,7 @@ var functions = {
             
         var eventID = req.body.eventID;
 
-        var getEvent = await Events.findOne({ _id: eventID }).populate({path : "rounds.unselectedStudends"}).populate({path : "rounds.selectedStudends"})
+        var getEvent = await Events.findOne({ _id: eventID }).populate({path : "rounds.absent"}).populate({path : "rounds.present"})
         if (!getEvent) {
             return res.status(400).json({ msg: "Events not found" });
         }
