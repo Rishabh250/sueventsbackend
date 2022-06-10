@@ -298,7 +298,16 @@ var functions = {
     
     getAllEvents: async function(req, res) {
        try{
-        var allEvents = await Events.find({ status: "open"}).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" });
+        var eventName = req.params.title;
+        console.log(eventName)
+           var allEvents;
+            if(req.params.title){
+                 allEvents = await Events.find({ status: "open", title : eventName}).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" });
+
+            }
+            if(eventName === " "){
+             allEvents = await Events.find({ status: "open"}).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" });
+            }
         return res.status(200).json({ events: allEvents });
        }
        catch(e){

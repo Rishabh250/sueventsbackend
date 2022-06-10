@@ -95,7 +95,7 @@ router.post("/createEvent", events.createEvent);
 //Get Events
 router.get("/getPlacementEvents", events.getPlacementEvents);
 router.get("/getGeneralEvents", events.getGeneralEvents);
-router.get("/getAllEvents", events.getAllEvents);
+router.get("/getAllEvents/eventTitle=:title", events.getAllEvents);
 
 //Store Rounds
 router.post("/createRound", events.createRounds);
