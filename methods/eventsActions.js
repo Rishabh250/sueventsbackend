@@ -397,7 +397,7 @@ var functions = {
         var eventID = req.body.eventID;
         var roundID = req.body.roundID;
         var getRound;
-        var getEvent = await Events.findOne({ _id: eventID }).populate({path : "rounds.selectedStudends"});
+        var getEvent = await Events.findOne({ _id: eventID }).populate({path : "rounds.present"});
         for (var i = 0; i < getEvent.rounds.length; i++) {
             if (getEvent.rounds[i]._id == roundID) {
                 getRound = getEvent.rounds[i];
