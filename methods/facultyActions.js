@@ -350,7 +350,7 @@ var functions = {
             if (req.headers["x-access-token"]) {
                 var token = req.headers["x-access-token"];
                 var decodeToken = jwt.decode(token, config.secret);
-                var getUserData = await Faculty.findOne({ email: decodeToken }).populate({path : "assignedEvents"})
+                var getUserData = await Faculty.findOne({ email: decodeToken.email }).populate({path : "assignedEvents"})
                 return res.json({ success: "events", eventsAssigned: getUserData.assignedEvents });
             } else {
                 return res.json({ success: false, msg: 'No Found' });
