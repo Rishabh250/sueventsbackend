@@ -188,15 +188,15 @@ var functions = {
                 for (var i = 0; i < getEvent.rounds.length; i++) {
                     if (getEvent.rounds[i]._id == roundID) {
                         round++;
-                        for (var j = 0; j < getEvent.rounds[i].selectedStudends.length; j++) {
-                            if (getEvent.rounds[i].selectedStudends[j] == getUserData.id) {
+                        for (var j = 0; j < getEvent.rounds[i].present.length; j++) {
+                            if (getEvent.rounds[i].present[j] == getUserData.id) {
                                 return res.status(400).json({ msg: "Already Registered" });
                             }
                         }
-                    var rrr =   getEvent.rounds[i].unselectedStudends.pull({_id : getUserData.id})
+                    var rrr =   getEvent.rounds[i].absent.pull({_id : getUserData.id})
                     console.log(rrr)
-                    console.log(getEvent.rounds[i].unselectedStudends);
-                    await getEvent.rounds[i].selectedStudends.push(getUserData.id);
+                    console.log(getEvent.rounds[i].absent);
+                    await getEvent.rounds[i].present.push(getUserData.id);
                     await getEvent.save();
                     }
                 }
@@ -257,7 +257,7 @@ var functions = {
             getUser.save();
             await getEvent.appliedStudents.push(getUserData);
             await getEvent.studentLeft.push(getUserData);
-            await getEvent.rounds[0].unselectedStudends.push(getUserData);
+            await getEvent.rounds[0].absent.push(getUserData);
             getEvent.save();
         } else {
             return res.status(400).json({ msg: "Event Close" });

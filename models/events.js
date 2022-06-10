@@ -43,6 +43,15 @@ var eventSchema = new Schema({
         selectedStudends: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: "Student"
+        }],
+
+        absent: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Student"
+        }],
+        present: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Student"
         }]
     }],
     createdBy: [{
