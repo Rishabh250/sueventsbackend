@@ -98,7 +98,9 @@ var functions = {
         if(storeRound.status === "close"){
             return res.status(400).json({msg : "Event close"})
         }
-        await storeRound.set({  studentLeft: [] });
+        await storeRound.set({studentLeft: [] });
+        await storeRound.save();
+
 
         var createRound = {
             lab: req.body.lab,
@@ -120,9 +122,9 @@ var functions = {
 
         if(storeRound.rounds.length > 0){
 
-            let selectselectedStudends = storeRound.rounds[storeRound.rounds.length -1].selectedStudends;
+            let selectPresent = storeRound.rounds[storeRound.rounds.length -1].present;
 
-            if(selectselectedStudends.length === 0){
+            if(selectPresent.length === 0){
                await  storeRound.rounds[storeRound.rounds.length -1].set({status : "close"});
                 await storeRound.rounds[storeRound.rounds.length -1].set({showQRCode : false});
                 await storeRound.rounds.push(createRound);
@@ -131,26 +133,25 @@ var functions = {
             }
 
            let closeEvent = storeRound.rounds[storeRound.rounds.length -1].set({status : "close"});
-            if(selectselectedStudends !== []){
-                var getAllSelectedStudents = Array.from(selectselectedStudends)
-                await storeRound.studentLeft.push(getAllSelectedStudents)  
-                await storeRound.save();
+            if(selectPresent !== []){
 
+                var getAllSelectedStudents = Array.from(selectPresent)
+                console.log(getAllSelectedStudents)
+                console.log(storeRound.studentLeft.push(getAllSelectedStudents))
+                // await storeRound.studentLeft.push(getAllSelectedStudents)  
+                await storeRound.save();
             } 
 
             await  storeRound.rounds.push(createRound);
-
             let stdList = storeRound.studentLeft;
             var getAllstudentLeft = Array.from(stdList);
             
-            let newRound = storeRound.rounds[storeRound.rounds.length -1].unselectedStudends;
+            let newRound = storeRound.rounds[storeRound.rounds.length -1].absent;
             await newRound.push(getAllstudentLeft);
     }
     else{
         await storeRound.rounds.push(createRound);
         await storeRound.save();
-
-
     }
         await storeRound.save();
         return res.status(200).json(storeRound);
@@ -193,10 +194,13 @@ var functions = {
                                 return res.status(400).json({ msg: "Already Registered" });
                             }
                         }
-                    var rrr =   getEvent.rounds[i].absent.pull({_id : getUserData.id})
-                    console.log(rrr)
-                    console.log(getEvent.rounds[i].absent);
+                    await getEvent.rounds[i].absent.pull(getUserData.id)
                     await getEvent.rounds[i].present.push(getUserData.id);
+                    
+                    if(getEvent.rounds.length > 1){
+                      await  getEvent.rounds[i-1].selectedStudends.push(getUserData.id);
+                      await  getEvent.rounds[i-1].unselectedStudends.pull(getUserData.id);
+                    }
                     await getEvent.save();
                     }
                 }
@@ -258,6 +262,8 @@ var functions = {
             await getEvent.appliedStudents.push(getUserData);
             await getEvent.studentLeft.push(getUserData);
             await getEvent.rounds[0].absent.push(getUserData);
+            await getEvent.rounds[0].unselectedStudends.push(getUserData);
+            await getEvent.rounds[0].totalStudent.push(getUserData);
             getEvent.save();
         } else {
             return res.status(400).json({ msg: "Event Close" });

@@ -36,6 +36,11 @@ var eventSchema = new Schema({
         lastRound: { type: Boolean },
         showQRCode : {type : Boolean},
 
+        totalStudent : [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Student"
+        }],
+
         unselectedStudends: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: "Student"
