@@ -296,6 +296,16 @@ var functions = {
         return res.status(403).json({msg : "Something went wrong"})       }
     },
     
+    getAllEvents: async function(req, res) {
+       try{
+        var allEvents = await Events.find({ status: "open"}).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" });
+        return res.status(200).json({ events: allEvents });
+       }
+       catch(e){
+        console.log(e)
+        return res.status(403).json({msg : "Something went wrong"})       }
+    },
+    
     getGeneralEvents: async function(req, res) {
        try{
         var allEvents = await Events.find({ status: "open", type : "General Event" }).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" });
