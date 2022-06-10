@@ -136,9 +136,10 @@ var functions = {
             if(selectPresent !== []){
 
                 var getAllSelectedStudents = Array.from(selectPresent)
-                console.log(getAllSelectedStudents)
-                console.log(storeRound.studentLeft.push(getAllSelectedStudents))
-                // await storeRound.studentLeft.push(getAllSelectedStudents)  
+                for(var k =0 ; k <getAllSelectedStudents.length ;k++){
+                    await storeRound.studentLeft.push(getAllSelectedStudents[k])  
+
+                }
                 await storeRound.save();
             } 
 
@@ -146,8 +147,13 @@ var functions = {
             let stdList = storeRound.studentLeft;
             var getAllstudentLeft = Array.from(stdList);
             
-            let newRound = storeRound.rounds[storeRound.rounds.length -1].absent;
-            await newRound.push(getAllstudentLeft);
+            let newRound = storeRound.rounds[storeRound.rounds.length -1];
+            for(var k =0 ; k <getAllSelectedStudents.length ;k++){
+                await newRound.absent.push(getAllstudentLeft[k]);
+                await newRound.totalStudent.push(getAllstudentLeft[k]);
+ 
+
+            }
     }
     else{
         await storeRound.rounds.push(createRound);
@@ -196,6 +202,7 @@ var functions = {
                         }
                     await getEvent.rounds[i].absent.pull(getUserData.id)
                     await getEvent.rounds[i].present.push(getUserData.id);
+                    await getEvent.rounds[i].unselectedStudends.push(getUserData.id);
                     
                     if(getEvent.rounds.length > 1){
                       await  getEvent.rounds[i-1].selectedStudends.push(getUserData.id);
@@ -262,7 +269,6 @@ var functions = {
             await getEvent.appliedStudents.push(getUserData);
             await getEvent.studentLeft.push(getUserData);
             await getEvent.rounds[0].absent.push(getUserData);
-            await getEvent.rounds[0].unselectedStudends.push(getUserData);
             await getEvent.rounds[0].totalStudent.push(getUserData);
             getEvent.save();
         } else {
