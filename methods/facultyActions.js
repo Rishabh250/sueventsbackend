@@ -355,6 +355,12 @@ var functions = {
                 for(var i =0 ; i < getUserData.assignedEvents.length;i++){
                     if(getUserData.assignedEvents[i].status === "open"){
                         eventList.push(getUserData.assignedEvents[i])
+                        eventList.sort(function(a, b) {
+                            var c = new Date(a.startDate);
+                            var d = new Date(b.startDate);
+                       
+                            return c-d;
+                        });
                     }
                 }
 

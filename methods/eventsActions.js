@@ -289,6 +289,13 @@ var functions = {
     getPlacementEvents: async function(req, res) {
        try{
         var allEvents = await Events.find({ status: "open", type : "Placement Event" }).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" });
+        allEvents.sort(function(a, b) {
+            var c = new Date(a.startDate);
+            var d = new Date(b.startDate);
+       
+            return c-d;
+        });
+       
         return res.status(200).json({ events: allEvents });
        }
        catch(e){
@@ -298,11 +305,15 @@ var functions = {
     
     getAllEvents: async function(req, res) {
        try{
-           console.log(req.params.title)
         var allEvents; 
         if(req.params.title){
             allEvents = await Events.find({"$or" : [{status : "open" ,title : {$regex:req.params.title }}]} ).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" });
-       
+            allEvents.sort(function(a, b) {
+                var c = new Date(a.startDate);
+                var d = new Date(b.startDate);
+           
+                return c-d;
+            });
         }
         if(req.params.title === " "){
             // var monthSort = {startDate : }
@@ -314,15 +325,6 @@ var functions = {
            
                 return c-d;
             });
-
-            // for(var i = 0 ; i < allEvents.length - 1; i++){}
-            // var date = allEvents[0].startDate.toString().split(" ")
-            // var month = date[1].split(",")
-    
-
-            // var newDate = date[0] + '/' +month[0] +'/' +month[1];
-            // var date = new Date(newDate);
-            // console.log(date.toISOString());
 
         }
 
@@ -337,6 +339,12 @@ var functions = {
     getGeneralEvents: async function(req, res) {
        try{
         var allEvents = await Events.find({ status: "open", type : "General Event" }).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" });
+        allEvents.sort(function(a, b) {
+            var c = new Date(a.startDate);
+            var d = new Date(b.startDate);
+       
+            return c-d;
+        });
         return res.status(200).json({ events: allEvents });
        }
        catch(e){
