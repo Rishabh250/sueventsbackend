@@ -323,6 +323,10 @@ var functions = {
     
     getAllEvents: async function(req, res) {
        try{
+        var time = 10;
+        var getHours= new Date().getHours().toLocaleString();
+        var todayDate = new Date().toISOString().slice(0, 10).toString().split("-");
+
         var allEvents; 
         if(req.params.title){
             allEvents = await Events.find({"$or" : [{status : "open" ,title : {$regex:req.params.title }}]} ).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" });
