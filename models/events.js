@@ -10,6 +10,7 @@ var eventSchema = new Schema({
     description: { type: String, required: true },
     startDate: { type: String, required: true },
     endDate: { type: String },
+    registration : {type : Boolean},
     eventPrice: { type: String, required: true },
     facultyAssigned: [{
         type: mongoose.Schema.Types.ObjectId,

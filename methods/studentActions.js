@@ -258,6 +258,7 @@ var functions = {
 
     getStudentEvents: async function(req, res) {
 
+       try {
         if (req.headers["x-access-token"]) {
             let eventList = [];
 
@@ -280,6 +281,12 @@ var functions = {
             return res.json({ success: false, msg: 'No Found' });
 
         }
+       }  
+       
+       catch(e){
+        console.log(e)
+        return res.status(403).json({msg : "Something went wrong"})
+    }
     },
 
     getAllUser: async function(req, res) {

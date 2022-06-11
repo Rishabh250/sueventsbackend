@@ -47,7 +47,8 @@ var functions = {
                 description: req.body.description,
                 eventPrice: req.body.eventPrice,
                 status: getStatus,
-                createdBy: [getUserData.id]
+                createdBy: [getUserData.id],
+                registration : "true"
             });
     
             createEvent.save(async function(err, newEvent) {
@@ -288,7 +289,24 @@ var functions = {
 
     getPlacementEvents: async function(req, res) {
        try{
+        var time = 10;
+        var getHours= new Date().getHours().toLocaleString();
+        var todayDate = new Date().toISOString().slice(0, 10).toString().split("-");
+
         var allEvents = await Events.find({ status: "open", type : "Placement Event" }).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" });
+        
+        for(var i =0 ;i < allEvents.length;i++ ){
+            var date = allEvents[i].startDate;
+            var finalDate = todayDate[2] +" "+ months[Number(todayDate[1]-1)]+", "+ todayDate[0]
+            
+            console.log(new Date(date))
+
+            if(new Date(finalDate) >= new Date(date) && Number(getHours) >= Number(time) ){
+                await allEvents[i].set({registration:"false"});
+               await allEvents[i].save();
+            }
+        }
+
         allEvents.sort(function(a, b) {
             var c = new Date(a.startDate);
             var d = new Date(b.startDate);
@@ -316,8 +334,8 @@ var functions = {
             });
         }
         if(req.params.title === " "){
-            // var monthSort = {startDate : }
-            allEvents = await Events.find({}).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" });
+            
+            allEvents = await Events.find({status : "open"}).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" });
 
             allEvents.sort(function(a, b) {
                 var c = new Date(a.startDate);
@@ -528,8 +546,6 @@ var functions = {
             t.email === value.email && t.email === value.email
             ))
     )
-            // let unselectedList = compareEvents.populate()
-            // console.log(unselectedList)
     
             return res.status(200).json({list:compareEvents});
         }
