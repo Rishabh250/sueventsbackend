@@ -254,7 +254,7 @@ var functions = {
             return res.status(400).json({ msg: "Events not found" });
         }
 
-        if (getEvent.status == "open") {
+        if (getEvent.registration == "true") {
             for (var j = 0; j < getEvent.appliedStudents.length; j++) {
                 if (getEvent.appliedStudents[j] == getUserData.id ) {
                     return res.status(400).json({ msg: "Already Registered" });
@@ -326,6 +326,19 @@ var functions = {
         var allEvents; 
         if(req.params.title){
             allEvents = await Events.find({"$or" : [{status : "open" ,title : {$regex:req.params.title }}]} ).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" });
+            
+            for(var i =0 ;i < allEvents.length;i++ ){
+                var date = allEvents[i].startDate;
+                var finalDate = todayDate[2] +" "+ months[Number(todayDate[1]-1)]+", "+ todayDate[0]
+                
+                console.log(new Date(date))
+    
+                if(new Date(finalDate) >= new Date(date) && Number(getHours) >= Number(time) ){
+                    await allEvents[i].set({registration:"false"});
+                   await allEvents[i].save();
+                }
+            }
+            
             allEvents.sort(function(a, b) {
                 var c = new Date(a.startDate);
                 var d = new Date(b.startDate);
@@ -337,6 +350,18 @@ var functions = {
             
             allEvents = await Events.find({status : "open"}).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" });
 
+            for(var i =0 ;i < allEvents.length;i++ ){
+                var date = allEvents[i].startDate;
+                var finalDate = todayDate[2] +" "+ months[Number(todayDate[1]-1)]+", "+ todayDate[0]
+                
+                console.log(new Date(date))
+    
+                if(new Date(finalDate) >= new Date(date) && Number(getHours) >= Number(time) ){
+                    await allEvents[i].set({registration:"false"});
+                   await allEvents[i].save();
+                }
+            }
+            
             allEvents.sort(function(a, b) {
                 var c = new Date(a.startDate);
                 var d = new Date(b.startDate);
