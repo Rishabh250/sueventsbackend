@@ -254,7 +254,7 @@ var functions = {
             return res.status(400).json({ msg: "Events not found" });
         }
 
-        if (getEvent.registration == "true") {
+        if (getEvent.registration === true) {
             for (var j = 0; j < getEvent.appliedStudents.length; j++) {
                 if (getEvent.appliedStudents[j] == getUserData.id ) {
                     return res.status(400).json({ msg: "Already Registered" });
@@ -273,7 +273,7 @@ var functions = {
             await getEvent.rounds[0].totalStudent.push(getUserData);
             getEvent.save();
         } else {
-            return res.status(400).json({ msg: "Event Close" });
+            return res.status(400).json({ msg: "Registration Close" });
         }
         
         return res.status(200).json(getEvent);
