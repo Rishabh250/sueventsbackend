@@ -305,10 +305,25 @@ var functions = {
        
         }
         if(req.params.title === " "){
-            var mysort = { _id : -1 };  
             // var monthSort = {startDate : }
-            allEvents = await Events.find({}).sort(mysort).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" });
-       
+            allEvents = await Events.find({}).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" });
+
+            allEvents.sort(function(a, b) {
+                var c = new Date(a.startDate);
+                var d = new Date(b.startDate);
+           
+                return c-d;
+            });
+
+            // for(var i = 0 ; i < allEvents.length - 1; i++){}
+            // var date = allEvents[0].startDate.toString().split(" ")
+            // var month = date[1].split(",")
+    
+
+            // var newDate = date[0] + '/' +month[0] +'/' +month[1];
+            // var date = new Date(newDate);
+            // console.log(date.toISOString());
+
         }
 
         
