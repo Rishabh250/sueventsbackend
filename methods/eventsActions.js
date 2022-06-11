@@ -305,9 +305,12 @@ var functions = {
        
         }
         if(req.params.title === " "){
-            allEvents = await Events.find({}).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" });
+            var mysort = { _id : -1 };  
+            // var monthSort = {startDate : }
+            allEvents = await Events.find({}).sort(mysort).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" });
        
         }
+
         
         return res.status(200).json({ events: allEvents });
        }
@@ -347,7 +350,7 @@ var functions = {
                 return res.status(400).json({ success: false, msg: "Required Event ID" });
             }
             let eventID = req.body.eventID;
-            var allEvents = await Events.findOne({_id : eventID} ).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" }).populate({path : "appliedStudents"});
+            var allEvents = await Events.findOne({_id : eventID, status : "open"} ).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" }).populate({path : "appliedStudents"});
             return res.status(200).json({ facultyAssigned: allEvents.facultyAssigned });
         }
         catch(e){
