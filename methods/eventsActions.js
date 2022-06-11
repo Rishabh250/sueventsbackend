@@ -381,7 +381,12 @@ var functions = {
     
     getGeneralEvents: async function(req, res) {
        try{
+        var time = 10;
+        var getHours= new Date().getHours().toLocaleString();
+        var todayDate = new Date().toISOString().slice(0, 10).toString().split("-");
+
         var allEvents = await Events.find({ status: "open", type : "General Event" }).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" });
+        
         for(var i =0 ;i < allEvents.length;i++ ){
             var date = allEvents[i].startDate;
             var finalDate = todayDate[2] +" "+ months[Number(todayDate[1]-1)]+", "+ todayDate[0]
