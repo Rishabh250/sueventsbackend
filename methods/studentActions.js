@@ -264,14 +264,16 @@ var functions = {
             var token = req.headers["x-access-token"];
             var decodeToken = jwt.decode(token, config.secret);
             var getUserData = await Users.findOne({ email: decodeToken }).populate({ path: "events" });
-            if(getUserData.assignedEvents[i].status === "open"){
-                eventList.push(getUserData.assignedEvents[i])
-                eventList.sort(function(a, b) {
-                    var c = new Date(a.startDate);
-                    var d = new Date(b.startDate);
-               
-                    return c-d;
-                });
+            for(var i =0 ; i < getUserData.events.length;i++){
+                if(getUserData.events[i].status === "open"){
+                    eventList.push(getUserData.events[i])
+                    eventList.sort(function(a, b) {
+                        var c = new Date(a.startDate);
+                        var d = new Date(b.startDate);
+                   
+                        return c-d;
+                    });
+                }
             }
             return res.json({ success: "User Info", eventsApplied: eventList});
         } else {
