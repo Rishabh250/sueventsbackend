@@ -257,11 +257,23 @@ var functions = {
     },
 
     getStudentEvents: async function(req, res) {
+
         if (req.headers["x-access-token"]) {
+            let eventList = [];
+
             var token = req.headers["x-access-token"];
             var decodeToken = jwt.decode(token, config.secret);
             var getUserData = await Users.findOne({ email: decodeToken }).populate({ path: "events" });
-            return res.json({ success: "User Info", eventsApplied: getUserData.events});
+            if(getUserData.assignedEvents[i].status === "open"){
+                eventList.push(getUserData.assignedEvents[i])
+                eventList.sort(function(a, b) {
+                    var c = new Date(a.startDate);
+                    var d = new Date(b.startDate);
+               
+                    return c-d;
+                });
+            }
+            return res.json({ success: "User Info", eventsApplied: eventList});
         } else {
             return res.json({ success: false, msg: 'No Found' });
 
