@@ -347,11 +347,18 @@ var functions = {
     },
     getAllEvents : async function(req,res){
         try{
+            let eventList = [];
             if (req.headers["x-access-token"]) {
                 var token = req.headers["x-access-token"];
                 var decodeToken = jwt.decode(token, config.secret);
-                var getUserData = await Faculty.findOne({ email: decodeToken}).populate({path : "assignedEvents"})
-                return res.json({ success: "events", eventsAssigned: getUserData.assignedEvents });
+                var getUserData = await Faculty.findOne({ email: decodeToken}).populate({path : "assignedEvents"});
+                for(var i =0 ; i < getUserData.assignedEvents.length;i++){
+                    if(getUserData.assignedEvents[i].status === "open"){
+                        eventList.push(getUserData.assignedEvents[i])
+                    }
+                }
+
+                return res.json({ success: "events", eventsAssigned: eventList });
             } else {
                 return res.json({ success: false, msg: 'No Found' });
     
