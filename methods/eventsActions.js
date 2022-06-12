@@ -422,7 +422,7 @@ var functions = {
                 return res.status(400).json({ success: false, msg: "Required Event ID" });
             }
             let eventID = req.body.eventID;
-            var allEvents = await Events.findOne({_id : eventID}).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" }).populate({path : "appliedStudents"}).populate({path : "rounds.unselectedStudends"}).populate({path : "rounds.selectedStudends"});
+            var allEvents = await Events.findOne({_id : eventID}).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" }).populate({path : "appliedStudents"}).populate({path : "rounds.unselectedStudends"}).populate({path : "rounds.selectedStudends"}).populate({path : "appliedStudents"}).populate({path : "rounds.unselectedStudends"}).populate({path : "rounds.absent"});
             return res.status(200).json({ events: allEvents });
         }
         catch(e){
