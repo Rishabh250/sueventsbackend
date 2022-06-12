@@ -480,9 +480,12 @@ var functions = {
             finalMinute = Number(isPM[0]) 
         }
 
-        
-        if(finalDate.toString() === date.toString() && getHours >= finalHour && getMinutes >= finalMinute){
-            await getRound[getRound.length - 1].set({showQRCode : "true"})
+        console.log(getHours)
+        console.log(finalHour)
+
+        if(finalDate.toString() === date.toString() && getHours >= finalHour ){
+            console.log(getRound[getRound.length - 1].set({showQRCode : "true"}))
+            getRound[getRound.length - 1].set({showQRCode : "true"})
             await getEvent.save();
         }
         else{
