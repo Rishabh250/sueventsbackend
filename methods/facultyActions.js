@@ -294,7 +294,7 @@ var functions = {
                 return res.status(400).json({ msg: "Please provide token" });
             }
 
-            if (!reqgetAllEvents.body.profileImage) {
+            if (!req.body.profileImage) {
                 return res.status(400).json({ msg: "Please upload a profile image" });
             } 
             else {
