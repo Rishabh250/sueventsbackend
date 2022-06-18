@@ -4,7 +4,7 @@ var config = require('../config/dbConfig');
 var bcrypt = require("bcrypt");
 const nodemailer = require('nodemailer');
 
-
+ 
 var functions = {
     addNew: function(req, res) {
         try{
@@ -93,6 +93,7 @@ var functions = {
 
     authorization: function(req, res) {
         try{
+
          var userdata =   Users.findOne({
                 email: req.body.email
             }, function(err, user) {
@@ -108,11 +109,18 @@ var functions = {
                         if (isMatch && !err) {
                             var token = jwt.encode(user.email, config.secret);
                             var deviceInfo = req.body.deviceInfo
-                            console.log()
                             if(user.deviceInfo === undefined){
-                               user.set({deviceInfo : deviceInfo})
-                               await user.save();
-                               res.json({ success: true, token: token });
+                                var getAndroidID = await Users.find({deviceInfo : deviceInfo});
+                                
+                                if(getAndroidID.length !== 0){
+                                    
+                                    if(getAndroidID[0].deviceInfo === deviceInfo){
+                                        return  res.status(400).json({ success: false, msg : "Device Already in use" });
+                                    }
+                                }
+                                user.set({deviceInfo : deviceInfo})
+                                await user.save();
+                                return res.json({ success: true, token: token });
 
                             }
                             else{
@@ -126,9 +134,8 @@ var functions = {
                             }
                             return;
                         } else {
-                            return res.status(403).json({ success: false, msg: "Password wrong" });
-                        }
-                    });
+                    }
+});
                 }
             });
         }
