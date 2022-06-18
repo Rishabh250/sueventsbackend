@@ -127,13 +127,15 @@ var functions = {
 
             if(selectPresent.length === 0){
                await  storeRound.rounds[storeRound.rounds.length -1].set({status : "close"});
+               await  storeRound.rounds[storeRound.rounds.length -1].set({showQRCode : "false"});
                 await storeRound.rounds[storeRound.rounds.length -1].set({showQRCode : false});
                 await storeRound.rounds.push(createRound);
                 await storeRound.save();
                 return res.status(200).json(storeRound)
             }
 
-           let closeEvent = storeRound.rounds[storeRound.rounds.length -1].set({status : "close"});
+           await storeRound.rounds[storeRound.rounds.length -1].set({status : "close"});
+           await  storeRound.rounds[storeRound.rounds.length -1].set({showQRCode : "false"});
             if(selectPresent !== []){
 
                 var getAllSelectedStudents = Array.from(selectPresent)
@@ -483,7 +485,7 @@ var functions = {
         console.log(getHours)
         console.log(finalHour)
 
-        if(finalDate.toString() === date.toString() && getHours >= finalHour ){
+        if(finalDate.toString() === date.toString() && getHours >= finalHour && getRound[getRound.length - 1].status === "open"){
             console.log(getRound[getRound.length - 1].set({showQRCode : "true"}))
             getRound[getRound.length - 1].set({showQRCode : "true"})
             await getEvent.save();
