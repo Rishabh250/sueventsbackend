@@ -8,7 +8,7 @@ const nodemailer = require('nodemailer');
 var functions = {
     addNew: function(req, res) {
         try{
-            let userImage;
+            let userImage,deviceInfo;
             type = req.body.type;
             if (type == "Student") {
                 checkEmail = req.body.email.split(".");
@@ -42,6 +42,9 @@ var functions = {
                 if (!(req.body.profileImage)) {
                     userImage = "";
 
+                }if (!(req.body.deviceInfo)) {
+                    deviceInfo = "";
+
                 }
 
                 Users.findOne({ email: req.body.email }).then((err) => {
@@ -60,7 +63,9 @@ var functions = {
                             year: req.body.year,
                             semester: req.body.semester,
                             gender: req.body.gender,
-                            profileImage: userImage
+                            profileImage: userImage,
+                            deviceInfo : deviceInfo
+
                         });
 
 
@@ -88,7 +93,7 @@ var functions = {
 
     authorization: function(req, res) {
         try{
-            Users.findOne({
+         var userdata =   Users.findOne({
                 email: req.body.email
             }, function(err, user) {
                 if (err) {
@@ -99,10 +104,24 @@ var functions = {
                 } else {
     
     
-                    user.comparePassword(req.body.password, function(err, isMatch) {
+                    user.comparePassword(req.body.password,async function(err, isMatch) {
                         if (isMatch && !err) {
                             var token = jwt.encode(user.email, config.secret);
-                            res.json({ success: true, token: token });
+                            var deviceInfo = "rrtt"
+                            console.log()
+                            if(user.deviceInfo === undefined){
+                               user.set({deviceInfo : deviceInfo})
+                               await user.save();
+                            }
+                            else{
+                               if(user.deviceInfo === req.body.deviceInfo){
+                                   res.json({ success: true, token: token });
+                               }
+                               else{
+                                res.status(400).json({ success: false, msg : "Device Model not same" });
+
+                               }
+                            }
                             return;
                         } else {
                             return res.status(403).json({ success: false, msg: "Password wrong" });
