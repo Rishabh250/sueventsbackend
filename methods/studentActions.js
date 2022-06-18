@@ -107,7 +107,7 @@ var functions = {
                     user.comparePassword(req.body.password,async function(err, isMatch) {
                         if (isMatch && !err) {
                             var token = jwt.encode(user.email, config.secret);
-                            var deviceInfo = "rrtt"
+                            var deviceInfo = req.body.deviceInfo
                             console.log()
                             if(user.deviceInfo === undefined){
                                user.set({deviceInfo : deviceInfo})
