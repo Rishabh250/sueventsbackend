@@ -112,6 +112,8 @@ var functions = {
                             if(user.deviceInfo === undefined){
                                user.set({deviceInfo : deviceInfo})
                                await user.save();
+                               res.json({ success: true, token: token });
+
                             }
                             else{
                                if(user.deviceInfo === req.body.deviceInfo){
