@@ -384,7 +384,8 @@ var functions = {
     removeID : async function(req,res){
         try{
             let studentID = req.body.studentID
-            let user = await Users.updateOne({_id : studentID},{ $unset: {deviceInfo : "cd299ef6dc121e4d"}})
+            let deviceID = req.body.deviceID
+            let user = await Users.updateOne({_id : studentID},{ $unset: {deviceInfo : deviceID}})
             return res.status(200).json({user : user})
             
         }
