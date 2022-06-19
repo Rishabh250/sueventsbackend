@@ -379,6 +379,19 @@ var functions = {
             console.log(e)
             return res.status(403).json({msg : "Something went wrong"})
         }
+
+    },
+    removeID : async function(req,res){
+        try{
+            let studentID = req.body.studentID
+            let user = await Users.updateOne({_id : studentID},{ $unset: {deviceInfo : "cd299ef6dc121e4d"}})
+            return res.status(200).json({user : user})
+            
+        }
+        catch(e){
+            console.log(e)
+            return res.status(403).json({msg : "Something went wrong"})
+        }
     }
 
 };

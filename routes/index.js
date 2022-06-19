@@ -45,6 +45,9 @@ router.post("/applyEvent", events.applyEvent);
 //Student Events
 router.get("/studentEvents", actions.getStudentEvents);
 
+//Remove Device ID
+router.post("/removeID", actions.removeID);
+
 
 //Faculty API
 
