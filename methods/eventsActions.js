@@ -194,7 +194,6 @@ var functions = {
             var round = 0;
     
             if (getEvent.status == "open") {
-                console.log(getEvent.rounds.length);
                 for (var i = 0; i < getEvent.rounds.length; i++) {
                     if (getEvent.rounds[i]._id == roundID) {
                         round++;
@@ -301,7 +300,6 @@ var functions = {
             var date = allEvents[i].startDate;
             var finalDate = todayDate[2] +" "+ months[Number(todayDate[1]-1)]+", "+ todayDate[0]
             
-            console.log(new Date(date))
 
             if(new Date(finalDate) >= new Date(date) && Number(getHours) >= Number(time) ){
                 await allEvents[i].set({registration:"false"});
@@ -337,7 +335,6 @@ var functions = {
                 var date = allEvents[i].startDate;
                 var finalDate = todayDate[2] +" "+ months[Number(todayDate[1]-1)]+", "+ todayDate[0]
                 
-                console.log(new Date(date))
     
                 if(new Date(finalDate) >= new Date(date) && Number(getHours) >= Number(time) ){
                     await allEvents[i].set({registration:"false"});
@@ -360,7 +357,6 @@ var functions = {
                 var date = allEvents[i].startDate;
                 var finalDate = todayDate[2] +" "+ months[Number(todayDate[1]-1)]+", "+ todayDate[0]
                 
-                console.log(new Date(date))
     
                 if(new Date(finalDate) >= new Date(date) && Number(getHours) >= Number(time) ){
                     await allEvents[i].set({registration:"false"});
@@ -397,7 +393,6 @@ var functions = {
             var date = allEvents[i].startDate;
             var finalDate = todayDate[2] +" "+ months[Number(todayDate[1]-1)]+", "+ todayDate[0]
             
-            console.log(new Date(date))
 
             if(new Date(finalDate) >= new Date(date) && Number(getHours) >= Number(time) ){
                 await allEvents[i].set({registration:"false"});
@@ -482,11 +477,8 @@ var functions = {
             finalMinute = Number(isPM[0]) 
         }
 
-        console.log(getHours)
-        console.log(finalHour)
 
         if(finalDate.toString() === date.toString() && getHours >= finalHour && getRound[getRound.length - 1].status === "open"){
-            console.log(getRound[getRound.length - 1].set({showQRCode : "true"}))
             getRound[getRound.length - 1].set({showQRCode : "true"})
             await getEvent.save();
         }

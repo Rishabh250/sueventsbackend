@@ -34,7 +34,6 @@ var functions = {
             return;
 
         } else if ((req.body.type != "Faculty")) {
-            console.log(req.body.type);
             res.status(400).send("Invalid Details");
             return;
         } else {
@@ -189,8 +188,7 @@ var functions = {
                         var otpVerify = req.body.otp;
     
                         var getUser = await Faculty.findOne({ email: req.body.email });
-                        //    console.log(getUser.otp);
-                        if (getUser.otp == otpVerify) {
+                       if (getUser.otp == otpVerify) {
                             await Faculty.updateOne({ email: req.body.email }, { $unset: { otp: otpVerify } });
                             return res.status(200).json({ msg: "OTP Verified" });
     

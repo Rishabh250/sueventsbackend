@@ -34,16 +34,12 @@ var functions = {
                 return;
 
             } else if ((req.body.type != "Student") && (req.body.type != "Faculty")) {
-                console.log(req.body.type);
                 res.status(400).send("Invalid Details");
                 return;
             } else {
 
                 if (!(req.body.profileImage)) {
                     userImage = "";
-
-                }if (!(req.body.deviceInfo)) {
-                    deviceInfo = "";
 
                 }
 
@@ -64,7 +60,6 @@ var functions = {
                             semester: req.body.semester,
                             gender: req.body.gender,
                             profileImage: userImage,
-                            deviceInfo : deviceInfo
 
                         });
 
@@ -123,17 +118,7 @@ var functions = {
                                 return res.json({ success: true, token: token });
 
                             }
-                            if(user.deviceInfo === ""){
-                                if(getAndroidID.length !== 0){
-
-                                    if(getAndroidID[0].deviceInfo === deviceInfo){
-                                        return  res.status(400).json({ success: false, msg : "Device Already in use" });
-                                    }
-                                }
-                                user.set({deviceInfo : deviceInfo})
-                                await user.save();
-                                return res.json({ success: true, token: token });
-                            }
+                         
                             else{
                                if(user.deviceInfo === req.body.deviceInfo){
                                    res.json({ success: true, token: token });
