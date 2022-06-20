@@ -8,7 +8,6 @@ const nodemailer = require('nodemailer');
 var functions = {
     addNew: function(req, res) {
         try{
-            let userImage,deviceInfo;
             type = req.body.type;
             if (type == "Student") {
                 checkEmail = req.body.email.split(".");
