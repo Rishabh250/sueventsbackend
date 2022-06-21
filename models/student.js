@@ -25,8 +25,6 @@ var userSchema = new Schema({
         ref: "Events"
     }],
     deviceInfo : {type : String}
-
-
 });
 
 userSchema.methods.comparePassword = function(pass, cb) {

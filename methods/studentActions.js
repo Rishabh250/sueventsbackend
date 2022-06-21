@@ -59,6 +59,7 @@ var functions = {
                             semester: req.body.semester,
                             gender: req.body.gender,
                             profileImage: userImage,
+                            deviceInfo : ""
 
                         });
 
