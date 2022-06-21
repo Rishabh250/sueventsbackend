@@ -59,14 +59,13 @@ var functions = {
                             semester: req.body.semester,
                             gender: req.body.gender,
                             profileImage: userImage,
-                            deviceInfo : ""
 
                         });
 
 
                         newUser.save(function(err, newUser) {
                             if (err) {
-                                return res.status(400).json({ success: false, msg: "Failed to save" });
+                                return res.status(400).json({ success: false, msg: err });
                             } else {
 
                                 var token = jwt.encode(req.body.email, config.secret);
@@ -105,8 +104,7 @@ var functions = {
                             var token = jwt.encode(user.email, config.secret);
                             var deviceInfo = req.body.deviceInfo
                             var getAndroidID = await Users.find({deviceInfo : deviceInfo});
-                            if(user.deviceInfo === undefined){
-                                
+                            if(user.deviceInfo === undefined){                     
                                 if(getAndroidID.length !== 0){
 
                                     if(getAndroidID[0].deviceInfo === deviceInfo){

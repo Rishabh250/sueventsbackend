@@ -16,6 +16,7 @@ var userSchema = new Schema({
     semester: { type: Number, required: true },
     year: { type: Number, required: true },
     gender: { type: String, required: true },
+    deviceInfo : {type : String},
     profileImage: {
         type: String
     },
@@ -24,7 +25,6 @@ var userSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Events"
     }],
-    deviceInfo : {type : String}
 });
 
 userSchema.methods.comparePassword = function(pass, cb) {
