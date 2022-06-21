@@ -24,7 +24,7 @@ var userSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Events"
     }],
-    deviceInfo : {type : String,require:true,unique:true}
+    deviceInfo : {type : String}
 
 
 });
