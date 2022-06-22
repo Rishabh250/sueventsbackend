@@ -155,7 +155,7 @@ var functions = {
                         service: 'gmail',
                         auth: {
                             user: 'brishabh139@gmail.com',
-                            pass: "kavhovonkeswhrph"
+                            pass: "budlzhqwfrwbanqn"
                         }
                     });
                     var finalOTP = Math.floor(100000 + Math.random() * 900000);
@@ -168,7 +168,7 @@ var functions = {
                     };
                     mailTransporter.sendMail(mailDetails, async function(err, data) {
                         if (err) {
-                            res.status(400).json({ msg: 'Error Occurs' });
+                            res.status(400).json({ msg: err });
                         } else {
                             var user = await Users.findOne({ email: userEmail });
                             user.otp = finalOTP;
