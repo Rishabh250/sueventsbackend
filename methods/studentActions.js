@@ -12,9 +12,9 @@ var functions = {
             return res.status(200).json({msg : "No Device Id found"})
         }
 
-        let deviceID = req.body.deviceID;
 
         let checkID = await Users.findOne({deviceInfo : req.body.deviceID})
+        console.log(req.body.deviceID)
         if(!checkID){
             return res.status(200).json({msg : "Success"})
         }
