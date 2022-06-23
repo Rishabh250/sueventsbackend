@@ -231,6 +231,7 @@ var functions = {
                         if (getUser.otp == otpVerify) {
                             await Users.updateOne({ email: req.body.email }, { $unset: { otp: otpVerify } });
                             await getUser.set({verified : true})
+                            await getUser.save();
                             return res.status(200).json({ msg: "OTP Verified" });
     
                         } else {
