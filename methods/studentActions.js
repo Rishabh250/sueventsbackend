@@ -75,7 +75,8 @@ var functions = {
                             semester: req.body.semester,
                             gender: req.body.gender,
                             profileImage: userImage,
-                            verified : false
+                            verified : false,
+                            deviceInfo : req.body.deviceInfo
 
                         });
 
