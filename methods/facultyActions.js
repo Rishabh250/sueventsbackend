@@ -58,7 +58,9 @@ var functions = {
                         type: req.body.type,
                         systemID: req.body.systemID,
                         gender: req.body.gender,
-                        profileImage: userImage
+                        profileImage: userImage,
+                        verified : false
+
                     });
 
 

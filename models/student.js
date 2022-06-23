@@ -17,6 +17,7 @@ var userSchema = new Schema({
     year: { type: Number, required: true },
     gender: { type: String, required: true },
     deviceInfo : {type : String,required:true,unique:true},
+    verified : {type : Boolean},
     profileImage: {
         type: String
     },

@@ -10,6 +10,8 @@ const facultySchema = new Schema({
     systemID: { type: String, require: true, unique: true },
     type: { type: String, require: true },
     gender: { type: String, required: true },
+    verified : {type : Boolean},
+
     profileImage: {
         type: String
     },
