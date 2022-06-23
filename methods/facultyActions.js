@@ -99,7 +99,7 @@ var functions = {
                         user.comparePassword(req.body.password, function(err, isMatch) {
                         if (isMatch && !err) {
                             var token = jwt.encode(user.email, config.secret);
-                            res.json({ success: true, token: token });
+                            res.json({ success: true, token: token,verified : user.verified });
                             return;
                         } else {
                             return res.status(403).json({ success: false, msg: "Password wrong" });

@@ -131,13 +131,13 @@ var functions = {
                                 }
                                 user.set({deviceInfo : deviceInfo})
                                 await user.save();
-                                return res.json({ success: true, token: token });
+                                return res.json({ success: true, token: token,verified : user.verified });
 
                             }
                          
                             else{
                                if(user.deviceInfo === req.body.deviceInfo){
-                                   res.json({ success: true, token: token });
+                                   res.json({ success: true, token: token,verified : user.verified });
                                }
                                else{
                                 res.status(401).json({ success: false, msg : "Device Model not same" });
