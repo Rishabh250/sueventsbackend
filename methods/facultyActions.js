@@ -190,8 +190,11 @@ var functions = {
                         var otpVerify = req.body.otp;
     
                         var getUser = await Faculty.findOne({ email: req.body.email });
-                       if (getUser.otp == otpVerify) {
+                       if (getUser.otp === otpVerify) {
+                            await getUser.set({verified : true})
                             await Faculty.updateOne({ email: req.body.email }, { $unset: { otp: otpVerify } });
+                            await getUser.save();
+
                             return res.status(200).json({ msg: "OTP Verified" });
     
                         } else {
