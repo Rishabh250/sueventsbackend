@@ -146,7 +146,8 @@ var functions = {
                             }
                             return;
                         } else {
-                    }
+                            return res.status(403).json({ success: false, msg: "Password wrong" });
+                        }
 });
                 }
             });
