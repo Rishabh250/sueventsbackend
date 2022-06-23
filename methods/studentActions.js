@@ -6,6 +6,22 @@ const nodemailer = require('nodemailer');
 
  
 var functions = {
+
+    checkdevice : async function(req,res){
+        if(!req.body.deviceID){
+            return res.status(200).json({msg : "No Device Id found"})
+        }
+
+        let deviceID = req.body.deviceID;
+
+        let checkID = await Users.findOne({deviceInfo : req.body.deviceID})
+        if(!checkID){
+            return res.status(200).json({msg : "Success"})
+        }
+        else{
+            return res.status(401).json({msg : "Device Found"})
+        }
+    },
     addNew: function(req, res) {
         try{
             type = req.body.type;
@@ -95,7 +111,7 @@ var functions = {
                     throw err;
                 }
                 if (!user) {
-                    res.status(403).send({ success: false, msg: "user not found" });
+                    res.status(401).send({ success: false, msg: "user not found" });
                 } else {
     
     
@@ -108,7 +124,7 @@ var functions = {
                                 if(getAndroidID.length !== 0){
 
                                     if(getAndroidID[0].deviceInfo === deviceInfo){
-                                        return  res.status(400).json({ success: false, msg : "Device Already in use" });
+                                        return  res.status(401).json({ success: false, msg : "Device Already in use" });
                                     }
                                 }
                                 user.set({deviceInfo : deviceInfo})
@@ -122,7 +138,7 @@ var functions = {
                                    res.json({ success: true, token: token });
                                }
                                else{
-                                res.status(400).json({ success: false, msg : "Device Model not same" });
+                                res.status(401).json({ success: false, msg : "Device Model not same" });
 
                                }
                             }

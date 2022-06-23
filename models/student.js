@@ -16,7 +16,7 @@ var userSchema = new Schema({
     semester: { type: Number, required: true },
     year: { type: Number, required: true },
     gender: { type: String, required: true },
-    deviceInfo : {type : String},
+    deviceInfo : {type : String,required:true,unique:true},
     profileImage: {
         type: String
     },

@@ -2,6 +2,7 @@ const express = require("express");
 const actions = require('../methods/studentActions');
 const events = require('../methods/eventsActions');
 const faculty = require('../methods/facultyActions');
+const student = require("../models/student");
 const router = express.Router();
 
 
@@ -87,7 +88,8 @@ router.post("/facultyUploadImage",faculty.uploadImage);
 router.get("/getAssignedEvents",faculty.getAllEvents);
 
 
-
+//Check Device
+router.post("/checkDevice",actions.checkdevice);
 
 
 // Event API
