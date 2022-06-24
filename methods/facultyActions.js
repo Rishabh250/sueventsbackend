@@ -29,11 +29,7 @@ var functions = {
         } else if ((req.body.password).length < 6) {
             res.status(400).send("Password length must be greater than 6");
             return;
-        } else if ((req.body.systemID).length != 10) {
-            res.status(400).send("Invalid System ID");
-            return;
-
-        } else if ((req.body.type != "Faculty")) {
+        }  else if ((req.body.type != "Faculty")) {
             res.status(400).send("Invalid Details");
             return;
         } else {
