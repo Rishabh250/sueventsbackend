@@ -9,7 +9,7 @@ var eventSchema = new Schema({
     status: { type: String },
     description: { type: String, required: true },
     startDate: { type: String, required: true },
-    endDate: { type: String },
+    endDate: { type: String,required:true },
     registration : {type : Boolean},
     eventPrice: { type: String, required: true },
     facultyAssigned: [{
