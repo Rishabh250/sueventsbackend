@@ -116,6 +116,7 @@ router.post("/getSingleRound", events.getSingleRound);
 
 //Close Event
 router.post("/closeEvent", events.closeEvent);
+router.post("/closeRegistration", events.closeRegistration);
 
 //Get unselected students 
 router.post("/getUnselectedStudents",events.getUnselectedStudents);

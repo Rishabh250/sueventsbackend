@@ -538,6 +538,25 @@ var functions = {
         }
     },
 
+    closeRegistration : async function(req,res){
+        try{
+            if (!req.body.eventID) {
+                res.status(400).json({ msg: "Enter Event ID" });
+            }
+    
+            var closeEvent = await Events.findOneAndUpdate({ _id: req.body.eventID }, { registration: "false" });
+            if (!closeEvent) {
+                return res.status(400).json({ msg: "Events not found" });
+            }
+            await closeEvent.save();
+            res.status(200).json({ msg: "Registraion Close", event: { id: req.body.eventID, title: closeEvent.title } });
+        }
+        catch(e){
+            console.log(e)
+            return res.status(403).json({msg : "Something went wrong"})
+        }
+    },
+
     getSelectedEvents : async function(req,res){
         try{
             let eventList =[];
