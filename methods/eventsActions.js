@@ -555,6 +555,23 @@ var functions = {
             console.log(e)
             return res.status(403).json({msg : "Something went wrong"})
         }
+    },openRegistration : async function(req,res){
+        try{
+            if (!req.body.eventID) {
+                res.status(400).json({ msg: "Enter Event ID" });
+            }
+    
+            var closeEvent = await Events.findOneAndUpdate({ _id: req.body.eventID }, { registration: "true" });
+            if (!closeEvent) {
+                return res.status(400).json({ msg: "Events not found" });
+            }
+            await closeEvent.save();
+            res.status(200).json({ msg: "Registraion Open", event: { id: req.body.eventID, title: closeEvent.title } });
+        }
+        catch(e){
+            console.log(e)
+            return res.status(403).json({msg : "Something went wrong"})
+        }
     },
 
     getSelectedEvents : async function(req,res){
