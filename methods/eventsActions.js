@@ -37,8 +37,19 @@ var functions = {
             } else {
                 getStatus = req.body.status;
             }
-    
-    
+
+            let startingDate = req.body.startDate
+            let registrationCloseDate = req.body.endDate
+            
+                if(new Date(startingDate) < new Date(Date.now())){
+            
+                if(new Date(registrationCloseDate) < new Date(startingDate)){
+                    return res.status(403).json({msg : "Invalid Registration Date"})
+                }
+            return res.status(403).json({msg : "Invalid Event Date"})
+
+            }
+        
             var createEvent = Events({
                 title: req.body.title,
                 type: req.body.type,
@@ -290,23 +301,10 @@ var functions = {
 
     getPlacementEvents: async function(req, res) {
        try{
-        var time = 10;
-        var getHours= new Date().getHours().toLocaleString();
-        var todayDate = new Date().toISOString().slice(0, 10).toString().split("-");
+        
 
         var allEvents = await Events.find({ status: "open", type : "Placement Event" }).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" });
         
-        for(var i =0 ;i < allEvents.length;i++ ){
-            var date = allEvents[i].startDate;
-            var finalDate = todayDate[2] +" "+ months[Number(todayDate[1]-1)]+", "+ todayDate[0]
-            
-
-            if(new Date(finalDate) >= new Date(date) && Number(getHours) >= Number(time) ){
-                await allEvents[i].set({registration:"false"});
-               await allEvents[i].save();
-            }
-        }
-
         allEvents.sort(function(a, b) {
             var c = new Date(a.startDate);
             var d = new Date(b.startDate);
@@ -323,24 +321,11 @@ var functions = {
     
     getAllEvents: async function(req, res) {
        try{
-        var time = 10;
-        var getHours= new Date().getHours().toLocaleString();
-        var todayDate = new Date().toISOString().slice(0, 10).toString().split("-");
+       
 
         var allEvents; 
         if(req.params.title){
             allEvents = await Events.find({"$or" : [{status : "open" ,title : {$regex:req.params.title }}]} ).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" });
-            
-            for(var i =0 ;i < allEvents.length;i++ ){
-                var date = allEvents[i].startDate;
-                var finalDate = todayDate[2] +" "+ months[Number(todayDate[1]-1)]+", "+ todayDate[0]
-                
-    
-                if(new Date(finalDate) >= new Date(date) && Number(getHours) >= Number(time) ){
-                    await allEvents[i].set({registration:"false"});
-                   await allEvents[i].save();
-                }
-            }
             
             allEvents.sort(function(a, b) {
                 var c = new Date(a.startDate);
@@ -383,22 +368,8 @@ var functions = {
     
     getGeneralEvents: async function(req, res) {
        try{
-        var time = 10;
-        var getHours= new Date().getHours().toLocaleString();
-        var todayDate = new Date().toISOString().slice(0, 10).toString().split("-");
 
         var allEvents = await Events.find({ status: "open", type : "General Event" }).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" });
-        
-        for(var i =0 ;i < allEvents.length;i++ ){
-            var date = allEvents[i].startDate;
-            var finalDate = todayDate[2] +" "+ months[Number(todayDate[1]-1)]+", "+ todayDate[0]
-            
-
-            if(new Date(finalDate) >= new Date(date) && Number(getHours) >= Number(time) ){
-                await allEvents[i].set({registration:"false"});
-               await allEvents[i].save();
-            }
-        }
        
         allEvents.sort(function(a, b) {
             var c = new Date(a.startDate);
