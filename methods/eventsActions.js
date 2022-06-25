@@ -91,6 +91,9 @@ var functions = {
         if (!req.headers["x-access-token"]) {
             return res.status(400).json({ msg: "Please provide token" });
         }
+        if(new Date(req.body.date) < new Date(Date.now())){
+            return res.status(403).json({msg : "Invalid  Date"})
+        }
         var token = req.headers["x-access-token"];
         var decodeToken = jwt.decode(token, config.secret);
         var getUserData = await Faculty.findOne({ email: decodeToken });
@@ -112,6 +115,7 @@ var functions = {
         }
         await storeRound.set({studentLeft: [] });
         await storeRound.save();
+        
 
 
         var createRound = {
