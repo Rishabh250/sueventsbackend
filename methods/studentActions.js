@@ -285,7 +285,7 @@ var functions = {
             if (req.headers["x-access-token"]) {
                 var token = req.headers["x-access-token"];
                 var decodeToken = jwt.decode(token, config.secret);
-                var getUserData = await Users.findOne({ email: decodeToken });
+                var getUserData = await Users.findOne({ email: decodeToken }).populate({path : "events"});
                 return res.json({ success: "User Info", user: getUserData });
             } else {
                 return res.json({ success: false, msg: 'No Found' });
@@ -392,6 +392,13 @@ var functions = {
             return res.status(200).json({user : user})
             
         }
+        catch(e){
+            console.log(e)
+            return res.status(403).json({msg : "Something went wrong"})
+        }
+    },
+    editDetails : async function(req,res){
+        try{}
         catch(e){
             console.log(e)
             return res.status(403).json({msg : "Something went wrong"})
