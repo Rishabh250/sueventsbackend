@@ -19,6 +19,9 @@ router.post("/createUser", actions.addNew);
 //Login User
 router.post("/loginUser", actions.authorization);
 
+//Update Data
+router.post("/updateDetails", actions.updateDetails);
+
 //Get Single User
 router.get("/getSingleUser", actions.singleUser);
 

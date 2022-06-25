@@ -157,6 +157,29 @@ var functions = {
             return res.status(403).json({msg : "Something went wrong"})
         }
     },
+
+    updateDetails : async function(req,res){
+        try{
+            let course = req.body.course
+            let year = req.body.year
+            let semester = req.body.semester
+            let id = req.body.id
+
+            var getUser = await Users.findOne({_id : id});
+            await getUser.set({course : course}) 
+            await getUser.set({year : year}) 
+            await getUser.set({semester : semester}) 
+            await getUser.save()
+
+            return res.status(200).json({user : getUser})
+        }
+        catch(e){
+            console.log(e)
+            return res.status(403).json({msg : "Something went wrong"})
+        }
+
+
+    },
     sendOTP: async function(req, res) {
         try{
             Users.findOne({
