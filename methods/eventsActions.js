@@ -342,16 +342,7 @@ var functions = {
             
             allEvents = await Events.find({status : "open"}).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" });
 
-            for(var i =0 ;i < allEvents.length;i++ ){
-                var date = allEvents[i].startDate;
-                var finalDate = todayDate[2] +" "+ months[Number(todayDate[1]-1)]+", "+ todayDate[0]
-                
-    
-                if(new Date(finalDate) >= new Date(date) && Number(getHours) >= Number(time) ){
-                    await allEvents[i].set({registration:"false"});
-                   await allEvents[i].save();
-                }
-            }
+        
             
             allEvents.sort(function(a, b) {
                 var c = new Date(a.startDate);
