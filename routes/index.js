@@ -7,7 +7,7 @@ const router = express.Router();
 
 
 router.get('/', (req, res) => {
-    res.send("Connect");
+    res.send(Date(Date.now()));
 
 });
 
