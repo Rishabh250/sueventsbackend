@@ -443,9 +443,8 @@ var functions = {
             finalMinute = Number(isPM[0]) 
         }
 
-
         if(finalDate.toString() === date.toString() && getHours >= finalHour && getRound[getRound.length - 1].status === "open"){
-            getRound[getRound.length - 1].set({showQRCode : "true"})
+            await getRound[getRound.length - 1].set({showQRCode : "true"})
             await getEvent.save();
         }
         else{
