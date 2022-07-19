@@ -354,6 +354,24 @@ var functions = {
     }
     },
 
+    getAllSTDs: async function(req, res) {
+        console.log(req.params.sysID)
+        try{
+         var allEvents; 
+         if(req.params.sysID){
+             allEvents = await Users.find({"$or" : [{systemID : {$regex:req.params.sysID }}]} ); 
+         }
+         if(req.params.sysID === " "){  
+             allEvents = await Users.find({});
+
+         }
+    
+         return res.status(200).json({ user: allEvents });
+        }
+        catch(e){
+         console.log(e)
+         return res.status(403).json({msg : "Something went wrong"})       }
+     },
     getAllUser: async function(req, res) {
         try{
             var getAllUserData = await Users.find({}).populate({ path: "events" });

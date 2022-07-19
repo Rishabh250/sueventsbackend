@@ -325,8 +325,6 @@ var functions = {
     
     getAllEvents: async function(req, res) {
        try{
-       
-
         var allEvents; 
         if(req.params.title){
             allEvents = await Events.find({"$or" : [{status : "open" ,title : {$regex:req.params.title }}]} ).populate({ path: "createdBy" }).populate({ path: "facultyAssigned" });
