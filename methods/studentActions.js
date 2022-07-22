@@ -375,7 +375,7 @@ var functions = {
     getAllUser: async function(req, res) {
         try{
             //
-            //
+            
             var getAllUserData = await Users.find({}).populate({ path: "events" });
             return res.json({ "user": getAllUserData });
         }
